@@ -31,11 +31,6 @@ const App = () => {
     return () => unsuscribeFromAuth(); 
   }, []);
 
-  useEffect(() => {
-    console.log('currentUser', currentUser);
-  }, [currentUser])
-  
-
   return (
     <div>
       <Header currentUser={currentUser} />
