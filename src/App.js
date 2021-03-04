@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './App.css';
 
@@ -15,6 +15,7 @@ import { setCurrentUser } from './redux/user/user.actions';
 const App = () => {
 
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user.currentUser);
 
   let unsuscribeFromAuth = null;
 
@@ -43,7 +44,17 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={HomePage} />
         <Route path='/shop' component={ShopPage} />
-        <Route path='/signin' component={SignInAndSignUpPage} />
+        <Route 
+          exact 
+          path='/signin' 
+          render={() => 
+            user ? (
+              <Redirect to='/' />
+            ) : (
+              <SignInAndSignUpPage />
+            )
+          } 
+        />
       </Switch>
     </div>
   );
