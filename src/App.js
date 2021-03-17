@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import './App.css';
@@ -12,38 +12,20 @@ import CheckoutPage from './pages/checkout/checkout.component';
 
 import Header from './components/header/header.component'
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
-import { setCurrentUser } from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selectors';
+import { checkUserSession } from './redux/user/user.actions';
 
 
 const App = () => {
-
   const dispatch = useDispatch();
+  
   const {user} = useSelector(createStructuredSelector({
     user: selectCurrentUser,
   }));
 
-  let unsuscribeFromAuth = null;
-
-
   useEffect(() => {
-    unsuscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot(snapShot => {
-          dispatch(setCurrentUser({
-            id: snapShot.id,
-            ...snapShot.data()
-          }));
-        })
-      }
-      dispatch(setCurrentUser(userAuth));
-    });
-
-    return () => unsuscribeFromAuth(); 
+    dispatch(checkUserSession());
   }, []);
 
   return (

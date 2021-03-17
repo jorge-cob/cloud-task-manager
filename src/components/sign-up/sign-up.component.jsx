@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 
 import {
   SignUpTitle,
   SignUpContainer
 } from './sign-up.styles';
+import { signUpStart } from '../../redux/user/user.actions';
 
 const SignUp = () => {
+  const dispatch = useDispatch();
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,22 +19,11 @@ const SignUp = () => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-
     if(password !== confirmPassword) {
       alert("passwords don't match");
       return;
     }
-
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(email, password);
-      await createUserProfileDocument(user, { displayName });
-      setDisplayName('');
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch(signUpStart({email, password, displayName}));
   };
 
 
