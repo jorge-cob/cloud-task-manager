@@ -2,11 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import CartIcon from '../cart-icon/cart-icon.component';
-import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 
 import { selectCurrentUser } from '../../redux/user/user.selectors';
-import { selectCartHidden } from '../../redux/cart/cart.selectors';
 
 import { ReactComponent as Logo } from '../../assets/crown.svg';
 
@@ -17,9 +14,8 @@ const Header = () => {
 
   const dispatch = useDispatch();
 
-  const {user, isCartHidden} = useSelector(createStructuredSelector({
+  const {user} = useSelector(createStructuredSelector({
     user: selectCurrentUser,
-    isCartHidden: selectCartHidden,
   }));
 
   return (
@@ -28,23 +24,13 @@ const Header = () => {
         <Logo className='logo' />
       </LogoContainer>
       <OptionsContainer>
-        <OptionLink to='/shop'>
-          SHOP
-        </OptionLink>
-        <OptionLink to='/shop'>
-          CONTACT
-        </OptionLink>
         {
           user ?
           <OptionLink as='div' onClick={() => dispatch(signOutStart())}>SIGN OUT</OptionLink>
           :
           <OptionLink to='/signin'> SIGN IN </OptionLink>
         }
-        <CartIcon />
       </OptionsContainer>
-      {
-        !isCartHidden ? <CartDropdown /> : null
-      }
     </HeaderContainer>
   );
 }

@@ -1,0 +1,8 @@
+const DirectoryActionTypes = {
+  FETCH_ITEMS_START: 'FETCH_ITEMS_START',
+  FETCH_ITEMS_SUCCESS: 'FETCH_ITEMS_SUCCESS',
+  FETCH_ITEMS_FAILURE: 'FETCH_ITEMS_FAILURE',
+  ADD_ITEM: 'ADD_ITEM'
+};
+
+export default DirectoryActionTypes;
