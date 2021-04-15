@@ -37,13 +37,13 @@ export function* addNewItem(action) {
   const { categoryId, newItemId, title, description, isTodo, status = '' } = action.payload;
   const itemData = {
     userId: userAuth.uid,
-    category: [categoryId],
+    category: categoryId,
     title,
     isTodo,
     status,
     description
   };
-  yield call(addItemToDB, categoryId, newItemId, itemData)
+  yield call(addItemToDB, newItemId, itemData)
 };
 
 export function* addItem() {

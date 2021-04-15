@@ -2,17 +2,21 @@ import React, { useState } from 'react';
 import { createStructuredSelector } from 'reselect';
 import { useSelector } from 'react-redux';
 
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';  
-import Checkbox from '@material-ui/core/Checkbox';
+import {
+  Button,
+  TextField,
+  DialogActions,
+  DialogContent,
+  Select,
+  InputLabel,
+  Checkbox
+} from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
+import CustomButton from '../custom-button/custom-button.component';
+import CategoryPopup from '../category-popup/category-popup.component';
+import MultiSelector from '../multi-selector/multi-selector.component';
+import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
 
 
 const ItemInput = ({ handleSubmit, handleClose }) => {
@@ -23,8 +27,9 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
   const [ description, setDescription ] = useState('');
   const [ isTodo, setIsTodo ] = useState(false);
   const [ status, setStatus ] = useState('pending');
-  const [ category, setCategory] = useState();
+  const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = React.useState("");
+  const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
 
 
   const onSubmit = () => {
@@ -36,6 +41,27 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
     }
 
   };
+
+  const handleClickOpenCategoryPopup = e => {
+    e.preventDefault();
+    setIsCategoryOpenPopup(true);
+  }
+
+  const handleCloseCategoryPopup = () => {
+    setIsCategoryOpenPopup(false);
+  };
+
+  const handleChangeMultipleCategories = (event) => {
+    const { options } = event.target;
+    const value = [];
+    for (let i = 0, l = options.length; i < l; i += 1) {
+      if (options[i].selected) {
+        value.push(options[i].value);
+      }
+    }
+    setCategory(value);
+  };
+
   return (
     <div>
     <form  noValidate>
@@ -63,43 +89,33 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
           onChange={e => setDescription(e.target.value)}
         />
 
-        <InputLabel style={{margin: '20px 0px 5px 0px'}}>Is it a To Do?</InputLabel>
-
-        <Checkbox
-          checked={isTodo}
-          onChange={e => setIsTodo(e.target.checked)}
+        <CheckboxWithSelectDropdown
+          label='Is To Do'
+          isChecked={isTodo}
+          onChangeCheck={e => setIsTodo(e.target.checked)}
+          onChangeDropdown={e => setStatus(e.target.value)}
+          dropdownLabel='Status'
+          options={{ 
+            pending: 'Pending',
+            done: 'Done',
+            discarded: 'Discarded'
+          }}
         />
 
-        { isTodo && (
-          <div>
-            <InputLabel style={{margin: '20px 0px 5px 0px'}}>Status</InputLabel>
-            <Select
-              native
-              value={status}
-              onChange={e => setStatus(e.target.value)}
-            >
-              <option value='pending'>Pending</option>
-              <option value='done'>Done</option>
-              <option value='discarded'>Discarded</option>
-            </Select>
-          </div>
-        )}
-
-        <InputLabel style={{margin: '20px 0px 5px 0px'}}>Category</InputLabel>
-        <Select
-          native
-          value={category}
-          onChange={e => setCategory(e.target.value)}
-        >
-        {
-          categories && Object.entries(categories).map(k => {
-            return (
-              <option key={k} value={k.id} >{k}</option>
-            )
-          }
-          )
-        }
-        </Select>
+        <MultiSelector 
+          label='Category'
+          items={categories}
+          selectedItems={category}
+          handleChange={handleChangeMultipleCategories}
+        />
+        <Button onClick={handleClickOpenCategoryPopup} color="primary">
+          + Add Category
+        </Button>
+        <CategoryPopup 
+          open={isCategoryPopupOpen}
+          handleClose={handleCloseCategoryPopup}
+        />
+    
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

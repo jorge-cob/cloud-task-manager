@@ -4,11 +4,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { HomePageContainer } from './homepage.styles';
 
+import { addNewItem, fetchItemsStart } from '../../redux/directory/directory.actions';
+import { addNewCategory, fetchCategoriesStart } from '../../redux/category/category.actions';
+
 import CustomButton from '../../components/custom-button/custom-button.component';
 import Directory from '../../components/directory/directory.component';
 import Popup1 from '../../components/popup/popup.component';
-import { addNewItem, fetchItemsStart } from '../../redux/directory/directory.actions';
-import { addNewCategory, fetchCategoriesStart } from '../../redux/category/category.actions';
 import ItemInput from '../../components/item-input/item-input.component';
 
 const HomePage = () => {
@@ -26,7 +27,11 @@ const HomePage = () => {
     const newItemId = uuidv4();
     handleClosePopup();
     dispatch(addNewItem(categoryId, newItemId, title, description, isTodo, status));
-    console.log('Create a new item');
+  };
+
+  const handleNewCategory = (title, description) => {
+    const newItemId = uuidv4();
+    dispatch(addNewCategory(newItemId, title, description));
   };
 
   useEffect(() => {
@@ -38,10 +43,10 @@ const HomePage = () => {
     <HomePageContainer>
       <Directory />
       <CustomButton onClick={handleClickOpenPopup}>
-        Add item
+        New entry
       </CustomButton>
-      <Popup1 open={isPopupOpen} handleClose={handleClosePopup} label='Add a new item'>
-        <ItemInput handleClose={handleClosePopup} handleSubmit={handleNewItem} />
+      <Popup1 open={isPopupOpen} handleClose={handleClosePopup} label='New entry'>
+        <ItemInput handleClose={handleClosePopup} handleSubmit={handleNewItem} handleCategorySubmit={handleNewCategory} />
       </Popup1>
     </HomePageContainer>
   )

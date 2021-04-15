@@ -128,7 +128,7 @@ export const getCurrentUser = () => {
   });
 };
 
-export const addItemToDB = async (categoryId, newItemId, itemData) => {
+export const addItemToDB = async (newItemId, itemData) => {
   return await firestore.collection('items').doc(newItemId).set(itemData);
 };
 
