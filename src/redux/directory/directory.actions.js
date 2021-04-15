@@ -3,13 +3,14 @@ import DirectoryActionTypes from './directory.types';
 import { firestore } from '../../firebase/firebase.utils';
 
 
-export const addNewItem = (categoryId = '', newItemId, title, description, status = '') => ({
+export const addNewItem = (categoryId = '', newItemId, title, description, isTodo, status = '') => ({
   type: DirectoryActionTypes.ADD_ITEM,
   payload: {
     categoryId,
     newItemId,
     title,
     description,
+    isTodo,
     status
   }
 });

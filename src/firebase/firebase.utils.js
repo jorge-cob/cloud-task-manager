@@ -41,6 +41,11 @@ export const createUserItemsDocument = async (userAuth) => {
   return firestore.collection('items');
 };
 
+export const createUserCategoriesDocument = async (userAuth) => {
+  if(!userAuth) return;
+  return firestore.collection('categories');
+};
+
 export const convertItemsSnapshotToMap = (items) => {
   const transformedItem = items.docs.map(doc => {
     const {
@@ -59,6 +64,22 @@ export const convertItemsSnapshotToMap = (items) => {
   });
   return transformedItem;
 };
+
+export const convertCategoriesSnapshotToMap = (categories) => {
+  const transformedCategory = categories.docs.map(doc => {
+    const {
+      title,
+      description
+    } = doc.data();
+    return {
+      id: doc.id,
+      title,
+      description,
+    }
+  });
+  return transformedCategory;
+};
+
 
 
 if (!firebase.apps.length) {
@@ -109,6 +130,10 @@ export const getCurrentUser = () => {
 
 export const addItemToDB = async (categoryId, newItemId, itemData) => {
   return await firestore.collection('items').doc(newItemId).set(itemData);
+};
+
+export const addCategoryToDb = async (newItemId, itemData) => {
+  return await firestore.collection('categories').doc(newItemId).set(itemData);
 };
 
 export const auth = firebase.auth();
