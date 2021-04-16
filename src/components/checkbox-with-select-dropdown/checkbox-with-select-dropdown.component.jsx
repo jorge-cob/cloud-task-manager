@@ -9,15 +9,13 @@ import {
 
 
 const CheckboxWithSelectDropdown = ({ label, isChecked, onChangeCheck, dropdownLabel, options, selectedOption, onChangeDropdown}) => {
-  console.log('options', options);
-  Object.entries(options).forEach(([key, value]) => {console.log('k', key , 'v', value)});
+  
   return (
     <div style={{display: 'flex', flexDirection: 'row'}}>
         <FormControlLabel
             control={<Checkbox checked={isChecked} onChange={onChangeCheck} name="checkedA" />}
             label={label}
         />
-  
 
         { isChecked && (
           <div style={{ paddingBottom: '22px' }}>
@@ -31,12 +29,10 @@ const CheckboxWithSelectDropdown = ({ label, isChecked, onChangeCheck, dropdownL
                 Object.keys(options).map(key => 
                   <option key={key} value={key}>{options[key]}</option>
                 )
-
               }
             </Select>
           </div>
         )}
-
     </div>
   );
 };

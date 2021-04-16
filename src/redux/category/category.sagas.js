@@ -3,7 +3,8 @@ import {
   getCurrentUser, 
   convertCategoriesSnapshotToMap,
   addCategoryToDb, 
-  createUserCategoriesDocument
+  createUserCategoriesDocument,
+  fetchCategories
 } from '../../firebase/firebase.utils';
 import { fetchCategoriesFailure, fetchCategoriesSuccess } from './category.actions';
 
@@ -16,10 +17,8 @@ export function* fetchCategoriesAsync() {
   try {
     const userAuth = yield getCurrentUser();
     if (!userAuth) return;
-    const userCategoriesRef = yield call(createUserCategoriesDocument, userAuth);
-    const userCategoriesSnapshot = yield userCategoriesRef.where('userId', '==', userAuth.uid).get();
-    const categoriesMap = yield call(convertCategoriesSnapshotToMap, userCategoriesSnapshot);
-    yield put(fetchCategoriesSuccess(categoriesMap));
+    const cats = yield fetchCategories(userAuth);
+    yield put(fetchCategoriesSuccess(cats));
   } catch(err) {
     yield put(fetchCategoriesFailure(err.message));
   }
@@ -35,13 +34,13 @@ export function* fetchCategoriesStart() {
 export function* addNewCategory(action) {
   const userAuth = yield getCurrentUser();
   const { newItemId, title, description } = action.payload;
+  const userId = userAuth.uid;
   const itemData = {
-    userId: userAuth.uid,
     id: newItemId,
     title,
     description
   };
-  yield call(addCategoryToDb, newItemId, itemData)
+  yield call(addCategoryToDb, userId, newItemId, itemData)
 };
 
 export function* addCategory() {

@@ -46,6 +46,21 @@ export const createUserCategoriesDocument = async (userAuth) => {
   return firestore.collection('categories');
 };
 
+export const fetchCategories = async (userAuth) => {
+  const junctions = await firestore
+  .collection(`junction_user_category`)
+  .where("userId", "==", userAuth.uid)
+  .get();
+
+  const categories = await Promise.all(
+    junctions.docs
+      .filter(doc => doc.exists)
+      .map(doc => firestore.doc(`categories/${doc.data().categoryId}`).get())
+  );
+
+  return categories.filter(doc => doc.exists).map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
 export const convertItemsSnapshotToMap = (items) => {
   const transformedItem = items.docs.map(doc => {
     const {
@@ -132,7 +147,9 @@ export const addItemToDB = async (newItemId, itemData) => {
   return await firestore.collection('items').doc(newItemId).set(itemData);
 };
 
-export const addCategoryToDb = async (newItemId, itemData) => {
+export const addCategoryToDb = async (userId, newItemId, itemData) => {
+  const junctionRef = firestore.doc(`junction_user_category/${userId}_${newItemId}`);
+  await junctionRef.set({ userId, categoryId: newItemId });
   return await firestore.collection('categories').doc(newItemId).set(itemData);
 };
 

@@ -7,13 +7,9 @@ import {
   TextField,
   DialogActions,
   DialogContent,
-  Select,
-  InputLabel,
-  Checkbox
 } from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
-import CustomButton from '../custom-button/custom-button.component';
 import CategoryPopup from '../category-popup/category-popup.component';
 import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
