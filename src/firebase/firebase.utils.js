@@ -64,7 +64,6 @@ export const fetchCategories = async (userAuth) => {
 export const convertItemsSnapshotToMap = (items) => {
   const transformedItem = items.docs.map(doc => {
     const {
-      category,
       title,
       status,
       description
@@ -73,8 +72,7 @@ export const convertItemsSnapshotToMap = (items) => {
       id: doc.id,
       title,
       status,
-      description,
-      category
+      description
     }
   });
   return transformedItem;
@@ -143,9 +141,14 @@ export const getCurrentUser = () => {
   });
 };
 
-export const addItemToDB = async (newItemId, itemData) => {
-  return await firestore.collection('items').doc(newItemId).set(itemData);
+export const addItemToDB = async (categoryId, newItemId, itemData) => {
+  await firestore.collection('items').doc(newItemId).set(itemData);
+  return categoryId.forEach(async cat => {
+    const junctionRef = firestore.doc(`junction_category_item/${cat}_${newItemId}`);
+    await junctionRef.set({ categoryId: cat, itemId: newItemId });
+  })
 };
+
 
 export const addCategoryToDb = async (userId, newItemId, itemData) => {
   const junctionRef = firestore.doc(`junction_user_category/${userId}_${newItemId}`);
