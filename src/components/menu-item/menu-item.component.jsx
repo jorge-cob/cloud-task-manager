@@ -13,7 +13,7 @@ const MenuItem = ({ title, onClick }) => {
       onClick={onClick}
     >
       <ContentContainer>
-        <ContentTitle>{ title.toUpperCase() }</ContentTitle>
+        <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
     </MenuItemContainer>
   )

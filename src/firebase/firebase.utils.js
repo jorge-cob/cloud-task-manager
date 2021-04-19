@@ -41,6 +41,21 @@ export const createUserItemsDocument = async (userAuth) => {
   return firestore.collection('items');
 };
 
+export const fetchItemCategories = async (action) => {
+  const junctions = await firestore
+  .collection(`junction_category_item`)
+  .where("itemId", "==", action.payload)
+  .get();
+
+  const categories = await Promise.all(
+    junctions.docs
+      .filter(doc => doc.exists)
+      .map(doc => firestore.doc(`categories/${doc.data().categoryId}`).get())
+  );
+
+  return categories.filter(doc => doc.exists).map(doc => ({ id: doc.id, ...doc.data() }));
+};
+
 export const createUserCategoriesDocument = async (userAuth) => {
   if(!userAuth) return;
   return firestore.collection('categories');
@@ -61,6 +76,12 @@ export const fetchCategories = async (userAuth) => {
   return categories.filter(doc => doc.exists).map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
+export const getItemCategories = async (itemsMap) => {
+  console.log(itemsMap);
+  return itemsMap;
+ 
+}
+
 export const convertItemsSnapshotToMap = (items) => {
   const transformedItem = items.docs.map(doc => {
     const {
@@ -72,7 +93,7 @@ export const convertItemsSnapshotToMap = (items) => {
       id: doc.id,
       title,
       status,
-      description
+      description,
     }
   });
   return transformedItem;
@@ -143,6 +164,16 @@ export const getCurrentUser = () => {
 
 export const addItemToDB = async (categoryId, newItemId, itemData) => {
   await firestore.collection('items').doc(newItemId).set(itemData);
+  const junctions = await firestore
+  .collection(`junction_category_item`)
+  .where("itemId", "==", newItemId)
+  .get();
+
+  await Promise.all(
+    junctions.docs
+      .filter(doc => doc.exists)
+      .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
+  );
   return categoryId.forEach(async cat => {
     const junctionRef = firestore.doc(`junction_category_item/${cat}_${newItemId}`);
     await junctionRef.set({ categoryId: cat, itemId: newItemId });

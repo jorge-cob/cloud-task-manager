@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { v4 as uuidv4 } from 'uuid';
 
 import { selectDirectoryItems } from '../../redux/directory/directory.selectors';
 import { addNewItem } from '../../redux/directory/directory.actions';
-import { addNewCategory } from '../../redux/category/category.actions';
 
-import MenuItem from '../menu-item/menu-item.component';
+import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-buttons.component';
 import Popup1 from '../popup/popup.component';
-import ItemInput from '../item-input/item-input.component';
 import ItemDetail from '../item-detail/item-detail.component';
+
+import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
+import ItemEdit from '../item-edit/item-edit.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
 
@@ -22,35 +22,55 @@ const Directory = () => {
   }));
 
   const dispatch = useDispatch();
-  const [isPopupOpen, setOpenPopup] = useState(false);
+  const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [itemShowing, setItemShowing] = useState('');
   const [itemTitle, setItemTitle] = useState('');
   
 
-  const handleClickOpenPopup = (id, title) => {
+  const handleClickOpenDetailPopup = (item, id, title) => {
+    dispatch(setItem(item));
+    dispatch(fetchItemCategoriesStart(id));
     setItemShowing(id);
     setItemTitle(title);
-    setOpenPopup(true);
+    setIsDetailPopupOpen(true);
   };
 
-  const handleClosePopup = () => {
-    setOpenPopup(false);
+  const handleCloseDetailPopup = () => {
+    setIsDetailPopupOpen(false);
   };
+
+  const handleEditItem = (categoryId, title, description, isTodo, status) => {
+    setIsEditPopupOpen(false);
+    dispatch(addNewItem(categoryId, itemShowing, title, description, isTodo, status));
+  };
+
+  const handleCloseEditPopup = () => {
+    setIsEditPopupOpen(false);
+  };
+
 
   return (
     <DirectoryMenuContainer>
       { 
-        items.map(({ id, title, ...otherItemsProps }) => (
-          <MenuItem 
+        items.map((item) => {
+          const { id, title, ...otherItemsProps } = item;
+        return (
+          <MenuItemWithButtons 
             key={id} 
-            title={title}
-            onClick={() => handleClickOpenPopup(id, title)}
+            title={title.toUpperCase()}
+            onClick={() => handleClickOpenDetailPopup(item, id, title)}
+            onButtonClick={() => setIsEditPopupOpen(true)}
             {...otherItemsProps}
           />
-        ))
+        )
+      })
       }
-      <Popup1 open={isPopupOpen} handleClose={handleClosePopup} label={itemTitle}>
-        <ItemDetail handleClose={handleClosePopup} itemId={itemShowing} />
+      <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={itemTitle.toUpperCase()} >
+        <ItemDetail handleClose={handleCloseDetailPopup} itemId={itemShowing} onEditMode={() => setIsEditPopupOpen(true)} />
+      </Popup1>
+      <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={itemTitle.toUpperCase()} >
+        <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
       </Popup1>
     </DirectoryMenuContainer>
   );

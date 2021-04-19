@@ -7,31 +7,26 @@ import {
   Typography
 } from '@material-ui/core';
 import { useSelector } from 'react-redux';
-import { selectItemDetails } from '../../redux/directory/directory.selectors';
 
-
-const ItemDetail = ({ handleClose, itemId }) => {
+const ItemDetail = ({ handleClose }) => {
   
-  const itemDetails = useSelector(selectItemDetails(itemId));
-  console.log('itemDetails', itemDetails);
+  const { item, categories } = useSelector(state => state.item);
   return (
     <div>
       <form  noValidate>
         <DialogContent>
           <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-            in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
+            {item.description}
           </Typography>
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
-            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
-            auctor fringilla.
-          </Typography>
-          
+          {
+            categories && categories.length ? categories.map(category => {
+              return (
+                <span key={category.id}> {category.title} </span>
+              )
+            })
+            : <span> No selected categories </span>
+          }
+  
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">

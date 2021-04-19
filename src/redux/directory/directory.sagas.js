@@ -3,7 +3,8 @@ import {
   getCurrentUser, 
   convertItemsSnapshotToMap,
   addItemToDB, 
-  createUserItemsDocument
+  createUserItemsDocument,
+  getItemCategories
 } from '../../firebase/firebase.utils';
 import { fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
 
@@ -19,6 +20,8 @@ export function* fetchItemsAsync() {
     const userItemsRef = yield call(createUserItemsDocument, userAuth);
     const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).get();
     const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
+    const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
+    yield console.log('itemsWithCategoriesMap', itemsMap);
     yield put(fetchItemsSuccess(itemsMap));
   } catch(err) {
     yield put(fetchItemsFailure(err.message));

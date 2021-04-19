@@ -9,10 +9,10 @@ export const selectDirectoryItems = createSelector(
 );
 
 export const selectItemDetails = memoize((itemId) => 
-createSelector(
-  [selectDirectory],
-  directory => directory.items ? directory.items.filter(
-    item => item.id === itemId
-  ) : null
-)
+  createSelector(
+    [selectDirectory],
+    directory => directory.items ? directory.items.filter(
+      item => item.id === itemId
+    ) : null
+  )
 );

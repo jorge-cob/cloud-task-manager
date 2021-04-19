@@ -28,14 +28,3 @@ export const fetchItemsFailure = errorMessage => ({
   type: DirectoryActionTypes.FETCH_ITEMS_FAILURE,
   payload: errorMessage
 })
-
-export const fetchItemsStartAsync = () => {
-  return dispatch => {
-    const itemsRef = firestore.collection('items');
-    dispatch(fetchItemsStart());
-    itemsRef.get().then(snapshot => {
-      dispatch(fetchItemsSuccess(snapshot));
-    }).catch(err => dispatch(fetchItemsFailure(err.message)));
-  }
-};
-
