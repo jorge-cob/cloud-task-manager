@@ -36,6 +36,14 @@ const Directory = () => {
     setIsDetailPopupOpen(true);
   };
 
+  const handleClickOpenEditPopup = (item, id, title) => {
+    dispatch(setItem(item));
+    dispatch(fetchItemCategoriesStart(id));
+    setItemShowing(id);
+    setItemTitle(title);
+    setIsDetailPopupOpen(true);
+  };
+
   const handleCloseDetailPopup = () => {
     setIsDetailPopupOpen(false);
   };
@@ -60,7 +68,7 @@ const Directory = () => {
             key={id} 
             title={title.toUpperCase()}
             onClick={() => handleClickOpenDetailPopup(item, id, title)}
-            onButtonClick={() => setIsEditPopupOpen(true)}
+            onButtonClick={() => handleClickOpenEditPopup(item, id, title)}
             {...otherItemsProps}
           />
         )
