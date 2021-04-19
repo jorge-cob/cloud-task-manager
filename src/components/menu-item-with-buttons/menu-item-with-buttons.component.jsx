@@ -22,7 +22,7 @@ const MenuItemWithButtons = ({ title, onClick, onButtonClick }) => {
       <ContentContainer>
         <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
-      <CustomButton onClick={handleButtonClick}> Edit </CustomButton>F
+      <CustomButton onClick={handleButtonClick}> Edit </CustomButton>
     </MenuItemContainer>
   )
 }
