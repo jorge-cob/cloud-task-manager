@@ -11,6 +11,7 @@ import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-button
 import Popup1 from '../popup/popup.component';
 import ItemDetail from '../item-detail/item-detail.component';
 import ItemEdit from '../item-edit/item-edit.component';
+import CategoryFilter from '../category-filter/category-filter.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
@@ -67,6 +68,7 @@ const Directory = () => {
 
   return (
     <div>
+    <CategoryFilter />
     <DirectoryMenuContainer>
       { 
         items.map((item) => {

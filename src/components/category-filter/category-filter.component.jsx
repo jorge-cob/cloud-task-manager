@@ -29,7 +29,7 @@ const CategoryFilter = () => {
 
   return (
   
-      <div>
+      <div style={{marginBottom: '30px'}}>
       {
         categories && categories.map(category => {
           return (
