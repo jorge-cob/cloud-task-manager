@@ -7,13 +7,19 @@ import {
   MenuItemContainer,
   ContentContainer,
   ContentTitle,
+  ButtonHolder
 } from './menu-item-with-buttons.styles';
 
-const MenuItemWithButtons = ({ title, onClick, onButtonClick }) => {
+const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButtonClick }) => {
 
-  const handleButtonClick = e => {
+  const handleEditButtonClick = e => {
     e.stopPropagation();
-    onButtonClick();
+    onEditButtonClick();
+  };
+
+  const handleDeleteButtonClick = e => {
+    e.stopPropagation();
+    onDeleteButtonClick();
   }
   return (
     <MenuItemContainer
@@ -22,7 +28,10 @@ const MenuItemWithButtons = ({ title, onClick, onButtonClick }) => {
       <ContentContainer>
         <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
-      <CustomButton onClick={handleButtonClick}> Edit </CustomButton>
+      <ButtonHolder>
+        <CustomButton onClick={handleEditButtonClick}> Edit </CustomButton>
+        <CustomButton onClick={handleDeleteButtonClick}> Delete </CustomButton>
+      </ButtonHolder>
     </MenuItemContainer>
   )
 }

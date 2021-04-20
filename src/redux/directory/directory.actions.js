@@ -1,8 +1,5 @@
 import DirectoryActionTypes from './directory.types';
 
-import { firestore } from '../../firebase/firebase.utils';
-
-
 export const addNewItem = (categoryId = '', newItemId, title, description, isTodo, status = '') => ({
   type: DirectoryActionTypes.ADD_ITEM,
   payload: {
@@ -13,6 +10,11 @@ export const addNewItem = (categoryId = '', newItemId, title, description, isTod
     isTodo,
     status
   }
+});
+
+export const removeItem = itemId => ({
+  type: DirectoryActionTypes.REMOVE_ITEM,
+  payload: itemId
 });
 
 export const fetchItemsStart = () => ({

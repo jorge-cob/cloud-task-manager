@@ -45,3 +45,6 @@ export const ContentTitle = styled.span`
   color: #4a4a4a;
 `;
 
+export const ButtonHolder = styled.div`
+  display: flex;
+`;

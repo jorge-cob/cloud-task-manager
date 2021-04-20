@@ -6,8 +6,6 @@ import { HomePageContainer } from './homepage.styles';
 import { fetchItemsStart } from '../../redux/directory/directory.actions';
 import { fetchCategoriesStart } from '../../redux/category/category.actions';
 
-import Directory from '../../components/directory/directory.component';
-import ButtonWithPopupWithSubmit from '../../components/button-with-popup-with-submit/button-with-popup-with-submit.component';
 import DirectoryOverviewContainer from '../../components/directory/directory-overview.container';
 
 const HomePage = () => {
@@ -21,7 +19,6 @@ const HomePage = () => {
   return (
     <HomePageContainer>
       <DirectoryOverviewContainer />
-      <ButtonWithPopupWithSubmit label='New entry' popupLabel='New entry' />
     </HomePageContainer>
   )
 };

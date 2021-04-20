@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { selectDirectoryFilteredCategories, selectDirectoryItems } from '../../redux/directory/directory.selectors';
-import { addNewItem } from '../../redux/directory/directory.actions';
+import { addNewItem, removeItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
 
 
@@ -13,7 +13,7 @@ import ItemDetail from '../item-detail/item-detail.component';
 import ItemEdit from '../item-edit/item-edit.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
-import ItemDetail2 from '../item-detail/item-detail.component';
+import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
 
 
 const Directory = () => {
@@ -59,8 +59,14 @@ const Directory = () => {
     setIsEditPopupOpen(false);
   };
 
+  const handleClickDeleteItem = id => {
+    setIsDetailPopupOpen(false);
+    dispatch(removeItem(id));
+  };
+
 
   return (
+    <div>
     <DirectoryMenuContainer>
       { 
         items.map((item) => {
@@ -72,7 +78,8 @@ const Directory = () => {
             key={id} 
             title={title.toUpperCase()}
             onClick={() => handleClickOpenDetailPopup(item, id, title)}
-            onButtonClick={() => handleClickOpenEditPopup(item, id, title)}
+            onEditButtonClick={() => handleClickOpenEditPopup(item, id, title)}
+            onDeleteButtonClick={() => handleClickDeleteItem(id)}
             {...otherItemsProps}
           />
         )
@@ -85,6 +92,9 @@ const Directory = () => {
         <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
       </Popup1>
     </DirectoryMenuContainer>
+    <ButtonWithPopupWithSubmit label='New entry' popupLabel='New entry' />
+
+    </div>
   );
 }
 

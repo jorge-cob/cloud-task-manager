@@ -1,5 +1,5 @@
 import DirectoryActionTypes from './directory.types'
-import { addCategoryToFilter, addItem, removeCategoryFromFilter } from './directory.utils';
+import { addCategoryToFilter, addItem, removeCategoryFromFilter, removeItem } from './directory.utils';
 
 
 const INITIAL_STATE = {
@@ -31,6 +31,11 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         items: addItem(state.items, action.payload)
+      }
+    case DirectoryActionTypes.REMOVE_ITEM:
+      return {
+        ...state,
+        items: removeItem(state.items, action.payload)
       }
     case DirectoryActionTypes.ADD_CATEGORY_FILTER:
       return {

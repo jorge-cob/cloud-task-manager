@@ -4,7 +4,8 @@ import {
   convertItemsSnapshotToMap,
   addItemToDB, 
   createUserItemsDocument,
-  getItemCategories
+  getItemCategories,
+  removeItemFromDB
 } from '../../firebase/firebase.utils';
 import { fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
 
@@ -44,7 +45,7 @@ export function* addNewItem(action) {
     status,
     description
   };
-  yield call(addItemToDB, categoryId, newItemId, itemData)
+  yield call(addItemToDB, categoryId, newItemId, itemData);
 };
 
 export function* addItem() {
@@ -54,10 +55,22 @@ export function* addItem() {
   )
 };
 
+export function* removeItemFromDirectory(action) {
+  yield call(removeItemFromDB, action.payload)
+};
+
+export function* removeItem() {
+  yield takeLatest(
+    DirectoryActionTypes.REMOVE_ITEM,
+    removeItemFromDirectory
+  )
+}
+
 
 export function* directorySagas() {
   yield all([
     call(fetchItemsStart),
     call(addItem),
+    call(removeItem)
   ]);
 };
