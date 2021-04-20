@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
@@ -13,6 +13,7 @@ import ItemDetail from '../item-detail/item-detail.component';
 import ItemEdit from '../item-edit/item-edit.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
+import ItemDetail2 from '../item-detail/item-detail.component';
 
 
 const Directory = () => {
@@ -28,7 +29,6 @@ const Directory = () => {
   const [itemShowing, setItemShowing] = useState('');
   const [itemTitle, setItemTitle] = useState('');
   
-
   const handleClickOpenDetailPopup = (item, id, title) => {
     dispatch(setItem(item));
     dispatch(fetchItemCategoriesStart(id));
@@ -40,6 +40,7 @@ const Directory = () => {
   const handleClickOpenEditPopup = (item, id, title) => {
     dispatch(setItem(item));
     dispatch(fetchItemCategoriesStart(id));
+    handleCloseDetailPopup();
     setItemShowing(id);
     setItemTitle(title);
     setIsEditPopupOpen(true);
@@ -78,7 +79,7 @@ const Directory = () => {
       })
       }
       <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={itemTitle.toUpperCase()} >
-        <ItemDetail handleClose={handleCloseDetailPopup} itemId={itemShowing} onEditMode={() => setIsEditPopupOpen(true)} />
+        <ItemDetail handleClose={handleCloseDetailPopup} onEditMode={handleClickOpenEditPopup} />
       </Popup1>
       <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={itemTitle.toUpperCase()} >
         <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
