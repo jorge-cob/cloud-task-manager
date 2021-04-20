@@ -27,4 +27,15 @@ export const fetchItemsSuccess = itemsMap => ({
 export const fetchItemsFailure = errorMessage => ({
   type: DirectoryActionTypes.FETCH_ITEMS_FAILURE,
   payload: errorMessage
-})
+});
+
+export const addNewCategoryToFilter = categoryId => ({
+  type: DirectoryActionTypes.ADD_CATEGORY_FILTER,
+  payload: categoryId
+});
+
+export const removeCategoryFromFilter = categoryId => ({
+  type: DirectoryActionTypes.REMOVE_CATEGORY_FILTER,
+  payload: categoryId
+});
+

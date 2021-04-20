@@ -8,6 +8,7 @@ import { fetchCategoriesStart } from '../../redux/category/category.actions';
 
 import Directory from '../../components/directory/directory.component';
 import ButtonWithPopupWithSubmit from '../../components/button-with-popup-with-submit/button-with-popup-with-submit.component';
+import DirectoryOverviewContainer from '../../components/directory/directory-overview.container';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const HomePage = () => {
 
   return (
     <HomePageContainer>
-      <Directory />
+      <DirectoryOverviewContainer />
       <ButtonWithPopupWithSubmit label='New entry' popupLabel='New entry' />
     </HomePageContainer>
   )

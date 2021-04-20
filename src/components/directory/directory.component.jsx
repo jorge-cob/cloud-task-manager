@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
 
 import { selectDirectoryItems } from '../../redux/directory/directory.selectors';
 import { addNewItem } from '../../redux/directory/directory.actions';
+import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
+
 
 import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-buttons.component';
 import Popup1 from '../popup/popup.component';
 import ItemDetail from '../item-detail/item-detail.component';
-
-import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
 import ItemEdit from '../item-edit/item-edit.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
@@ -17,11 +16,9 @@ import { DirectoryMenuContainer } from './directory.styles';
 
 const Directory = () => {
 
-  const {items} = useSelector(createStructuredSelector({
-    items: selectDirectoryItems
-  }));
-
+  const items = useSelector(selectDirectoryItems);
   const dispatch = useDispatch();
+
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [itemShowing, setItemShowing] = useState('');
@@ -41,7 +38,7 @@ const Directory = () => {
     dispatch(fetchItemCategoriesStart(id));
     setItemShowing(id);
     setItemTitle(title);
-    setIsDetailPopupOpen(true);
+    setIsEditPopupOpen(true);
   };
 
   const handleCloseDetailPopup = () => {
@@ -56,7 +53,6 @@ const Directory = () => {
   const handleCloseEditPopup = () => {
     setIsEditPopupOpen(false);
   };
-
 
   return (
     <DirectoryMenuContainer>

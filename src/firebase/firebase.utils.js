@@ -77,9 +77,16 @@ export const fetchCategories = async (userAuth) => {
 }
 
 export const getItemCategories = async (itemsMap) => {
-  console.log(itemsMap);
-  return itemsMap;
- 
+  const items = [];
+  await Promise.all(Object.values(itemsMap).map(async item => {
+    const getCategories = await firestore.collection(`junction_category_item`).where('itemId', '==', item.id).get();
+    const categoryIds = await getCategories.docs.filter(doc => doc.exists).map(doc => doc.data().categoryId);     
+    items.push({
+      ...item,
+      categories: categoryIds
+    })
+  }));
+  return items;
 }
 
 export const convertItemsSnapshotToMap = (items) => {

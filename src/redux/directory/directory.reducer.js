@@ -1,11 +1,12 @@
 import DirectoryActionTypes from './directory.types'
-import { addItem } from './directory.utils';
+import { addCategoryToFilter, addItem, removeCategoryFromFilter } from './directory.utils';
 
 
 const INITIAL_STATE = {
   items: [],
   isFetching: false,
-  errorMessage: undefined
+  errorMessage: undefined,
+  filteredCategories: [],
 };
 const directoryReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -31,6 +32,17 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         items: addItem(state.items, action.payload)
       }
+    case DirectoryActionTypes.ADD_CATEGORY_FILTER:
+      return {
+        ...state,
+        filteredCategories: addCategoryToFilter(state.filteredCategories, action.payload)
+      }
+    case DirectoryActionTypes.REMOVE_CATEGORY_FILTER:
+      return {
+        ...state,
+        filteredCategories: removeCategoryFromFilter(state.filteredCategories, action.payload)
+      }
+    
     default:
       return state;
   }

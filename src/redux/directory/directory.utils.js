@@ -13,3 +13,10 @@ export const addItem = (directoryItems, payload) => {
   return [...directoryItems, { id: newItemId, title: title, description: description, isTodo: isTodo, status: status }]
 };
 
+export const addCategoryToFilter = (filteredCategories, payload) => {
+  return [...filteredCategories, payload]
+};
+
+export const removeCategoryFromFilter = (filteredCategories, payload) => {
+  return filteredCategories.filter(categoryId => categoryId !== payload);
+};

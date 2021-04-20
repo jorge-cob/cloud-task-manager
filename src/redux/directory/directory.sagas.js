@@ -21,8 +21,7 @@ export function* fetchItemsAsync() {
     const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).get();
     const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
     const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
-    yield console.log('itemsWithCategoriesMap', itemsMap);
-    yield put(fetchItemsSuccess(itemsMap));
+    yield put(fetchItemsSuccess(itemsWithCategoriesMap));
   } catch(err) {
     yield put(fetchItemsFailure(err.message));
   }
