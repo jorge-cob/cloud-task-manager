@@ -23,7 +23,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
   const { item, categories } = useSelector(state => state.item);
   const [ title, setTitle ] = useState(item.title);
   const [ description, setDescription ] = useState(item.description);
-  const [ isTodo, setIsTodo ] = useState(item.isTodo || false);
+  const [ isTodo, setIsTodo ] = useState(item.isTodo);
   const [ status, setStatus ] = useState(item.status);
   const [ category, setCategory] = useState(categories);
   const [titleErrorText, setTitleErrorText] = React.useState("");
@@ -96,6 +96,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
           isChecked={isTodo}
           onChangeCheck={e => setIsTodo(e.target.checked)}
           onChangeDropdown={e => setStatus(e.target.value)}
+          selectedOption={status}
           dropdownLabel='Status'
           options={{ 
             pending: 'Pending',

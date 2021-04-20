@@ -64,7 +64,7 @@ const Directory = () => {
       { 
         items.map((item) => {
           const { id, title, categories, ...otherItemsProps } = item;
-          const isFiltered = filteredCategories.length == 0 || categories.some(v=> filteredCategories.indexOf(v) !== -1);
+          const isFiltered = filteredCategories.length == 0 || categories && categories.some(v=> filteredCategories.indexOf(v) !== -1);
         return (
           isFiltered && 
           <MenuItemWithButtons 

@@ -36,7 +36,7 @@ export function* fetchItemsStart() {
 
 export function* addNewItem(action) {
   const userAuth = yield getCurrentUser();
-  const { categoryId, newItemId, title, description, isTodo, status = '' } = action.payload;
+  const { categoryId, newItemId, title, description, isTodo, status } = action.payload;
   const itemData = {
     userId: userAuth.uid,
     title,
