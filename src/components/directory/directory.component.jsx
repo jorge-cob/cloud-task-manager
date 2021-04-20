@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
-import { selectDirectoryItems } from '../../redux/directory/directory.selectors';
+import { selectDirectoryFilteredCategories, selectDirectoryItems } from '../../redux/directory/directory.selectors';
 import { addNewItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
 
@@ -16,7 +17,10 @@ import { DirectoryMenuContainer } from './directory.styles';
 
 const Directory = () => {
 
-  const items = useSelector(selectDirectoryItems);
+  const {items, filteredCategories} = useSelector(createStructuredSelector({
+    items: selectDirectoryItems,
+    filteredCategories: selectDirectoryFilteredCategories
+  }));
   const dispatch = useDispatch();
 
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
@@ -54,12 +58,15 @@ const Directory = () => {
     setIsEditPopupOpen(false);
   };
 
+
   return (
     <DirectoryMenuContainer>
       { 
         items.map((item) => {
-          const { id, title, ...otherItemsProps } = item;
+          const { id, title, categories, ...otherItemsProps } = item;
+          const isFiltered = filteredCategories.length == 0 || categories.some(v=> filteredCategories.indexOf(v) !== -1);
         return (
+          isFiltered && 
           <MenuItemWithButtons 
             key={id} 
             title={title.toUpperCase()}
