@@ -9,7 +9,7 @@ const config = {
   storageBucket: "wholist-db.appspot.com",
   messagingSenderId: "149014277771",
   appId: "1:149014277771:web:1ad9400fc15b803caaae8e"
-};;
+};
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if(!userAuth) return;

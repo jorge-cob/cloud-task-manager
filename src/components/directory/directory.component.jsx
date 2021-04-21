@@ -20,6 +20,7 @@ import CategoryFilter from '../category-filter/category-filter.component';
 import { DirectoryMenuContainer } from './directory.styles';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
 import CategoryPopup from '../category-popup/category-popup.component';
+import TodoFilter from '../todo-filter/todo-filter.component';
 
 
 const Directory = () => {
@@ -84,6 +85,7 @@ const Directory = () => {
   return (
     <div style={{width: '100%'}}>
       <CategoryFilter />
+      <TodoFilter />
       <DirectoryMenuContainer>
         { 
           items.map((item) => {

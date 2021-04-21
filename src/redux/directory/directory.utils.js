@@ -13,10 +13,4 @@ export const addItem = (directoryItems, payload) => {
   return [...directoryItems, { id: newItemId, title: title, description: description, isTodo: isTodo, status: status, categories: categoryId }]
 };
 
-export const addCategoryToFilter = (filteredCategories, payload) => {
-  return [...filteredCategories, payload]
-};
-
-export const removeCategoryFromFilter = (filteredCategories, payload) => filteredCategories.filter(categoryId => categoryId !== payload);
-
 export const removeItem = (directoryItems, payload) => directoryItems.filter(item => item.id !== payload);

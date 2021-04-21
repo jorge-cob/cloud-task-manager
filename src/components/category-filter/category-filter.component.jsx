@@ -2,11 +2,11 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { Chip } from '@material-ui/core';
-
 import { selectDirectoryFilteredCategories } from '../../redux/directory/directory.selectors';
 import { selectCategoryItems } from '../../redux/category/category.selectors';
 import { addNewCategoryToFilter, removeCategoryFromFilter } from '../../redux/directory/directory.actions';
+
+import { CategoryChip, CategoryMenuContainer } from './category-filter.styles';
 
 
 
@@ -29,22 +29,20 @@ const CategoryFilter = () => {
 
   return (
   
-      <div style={{marginBottom: '30px'}}>
+      <CategoryMenuContainer>
       {
         categories && categories.map(category => {
           return (
-            <Chip 
+            <CategoryChip 
               key={category.id} 
               label={category.title} 
-              variant="outlined" 
-              color="secondary" 
+              color={`${filteredCategories.includes(category.id) ? 'primary' : 'default'}`} 
               onClick={() => handleFilteredCategories(category.id)}
-              style={{backgroundColor: `${filteredCategories.includes(category.id) ? 'green' : ''}`}}
             />
           )
         })
       }
-      </div>
+      </CategoryMenuContainer>
 
   );
 }

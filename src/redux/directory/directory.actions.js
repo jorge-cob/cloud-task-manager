@@ -41,3 +41,16 @@ export const removeCategoryFromFilter = categoryId => ({
   payload: categoryId
 });
 
+export const toggleTodoFilter = () => ({
+  type: DirectoryActionTypes.TOGGLE_TODO_FILTER,
+});
+
+export const addStatusFilter = statusId => ({
+  type: DirectoryActionTypes.ADD_STATUS_FILTER,
+  payload: statusId
+});
+
+export const removeStatusFilter = statusId => ({
+  type: DirectoryActionTypes.REMOVE_STATUS_FILTER,
+  payload: statusId
+});
