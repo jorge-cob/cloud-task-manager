@@ -10,12 +10,11 @@ import {
 } from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
-import CategoryPopup from '../category-popup/category-popup.component';
 import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
 
 
-const ItemInput = ({ handleSubmit, handleClose }) => {
+const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const {categories} = useSelector(createStructuredSelector({
     categories: selectCategoryItems
   }));
@@ -25,8 +24,6 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
   const [ status, setStatus ] = useState('pending');
   const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = React.useState("");
-  const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
-
 
   const onSubmit = () => {
     if (!title) {
@@ -36,15 +33,6 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
       handleSubmit(category, title, description, isTodo, status);
     }
 
-  };
-
-  const handleClickOpenCategoryPopup = e => {
-    e.preventDefault();
-    setIsCategoryOpenPopup(true);
-  }
-
-  const handleCloseCategoryPopup = () => {
-    setIsCategoryOpenPopup(false);
   };
 
   const handleChangeMultipleCategories = (event) => {
@@ -104,14 +92,10 @@ const ItemInput = ({ handleSubmit, handleClose }) => {
           selectedItems={category}
           handleChange={handleChangeMultipleCategories}
         />
-        <Button onClick={handleClickOpenCategoryPopup} color="primary">
+        <Button onClick={onOpenCategoryPopup} color="primary">
           + Add Category
         </Button>
-        <CategoryPopup 
-          open={isCategoryPopupOpen}
-          handleClose={handleCloseCategoryPopup}
-        />
-    
+      
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

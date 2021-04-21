@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
+import {
+  Button
+} from '@material-ui/core';
+
 import { selectDirectoryFilteredCategories, selectDirectoryItems } from '../../redux/directory/directory.selectors';
 import { addNewItem, removeItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
@@ -15,6 +19,7 @@ import CategoryFilter from '../category-filter/category-filter.component';
 
 import { DirectoryMenuContainer } from './directory.styles';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
+import CategoryPopup from '../category-popup/category-popup.component';
 
 
 const Directory = () => {
@@ -29,6 +34,16 @@ const Directory = () => {
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [itemShowing, setItemShowing] = useState('');
   const [itemTitle, setItemTitle] = useState('');
+  const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
+
+  const handleClickOpenCategoryPopup = e => {
+    e.preventDefault();
+    setIsCategoryOpenPopup(true);
+  }
+
+  const handleCloseCategoryPopup = () => {
+    setIsCategoryOpenPopup(false);
+  };
   
   const handleClickOpenDetailPopup = (item, id, title) => {
     dispatch(setItem(item));
@@ -68,34 +83,42 @@ const Directory = () => {
 
   return (
     <div style={{width: '100%'}}>
-    <CategoryFilter />
-    <DirectoryMenuContainer>
-      { 
-        items.map((item) => {
-          const { id, title, categories, ...otherItemsProps } = item;
-          const isFiltered = filteredCategories.length == 0 || categories && categories.some(v=> filteredCategories.indexOf(v) !== -1);
-        return (
-          isFiltered && 
-          <MenuItemWithButtons 
-            key={id} 
-            title={title.toUpperCase()}
-            onClick={() => handleClickOpenDetailPopup(item, id, title)}
-            onEditButtonClick={() => handleClickOpenEditPopup(item, id, title)}
-            onDeleteButtonClick={() => handleClickDeleteItem(id)}
-            {...otherItemsProps}
-          />
-        )
-      })
-      }
-      <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={itemTitle.toUpperCase()} >
-        <ItemDetail handleClose={handleCloseDetailPopup} onEditMode={handleClickOpenEditPopup} />
-      </Popup1>
-      <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={itemTitle.toUpperCase()} >
-        <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
-      </Popup1>
-    </DirectoryMenuContainer>
-    <ButtonWithPopupWithSubmit label='New entry' popupLabel='New entry' />
-
+      <CategoryFilter />
+      <DirectoryMenuContainer>
+        { 
+          items.map((item) => {
+            const { id, title, categories, ...otherItemsProps } = item;
+            const isFiltered = filteredCategories.length == 0 || categories && categories.some(v=> filteredCategories.indexOf(v) !== -1);
+          return (
+            isFiltered && 
+            <MenuItemWithButtons 
+              key={id} 
+              title={title.toUpperCase()}
+              onClick={() => handleClickOpenDetailPopup(item, id, title)}
+              onEditButtonClick={() => handleClickOpenEditPopup(item, id, title)}
+              onDeleteButtonClick={() => handleClickDeleteItem(id)}
+              {...otherItemsProps}
+            />
+          )
+        })
+        }
+        <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={itemTitle.toUpperCase()} >
+          <ItemDetail handleClose={handleCloseDetailPopup} onEditMode={handleClickOpenEditPopup} />
+        </Popup1>
+        <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={itemTitle.toUpperCase()} >
+          <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
+        </Popup1>
+        <CategoryPopup 
+          open={isCategoryPopupOpen}
+          handleClose={handleCloseCategoryPopup}
+        />
+      </DirectoryMenuContainer>
+        <div style={{display: 'flex'}}>
+          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' onOpenCategoryPopup={() => setIsCategoryOpenPopup(true)} />
+          <Button onClick={handleClickOpenCategoryPopup} color="primary">
+            + Category
+          </Button>
+        </div>
     </div>
   );
 }
