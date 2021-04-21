@@ -17,7 +17,7 @@ const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButton
     onEditButtonClick();
   };
 
-  const handleDeleteButtonClick = e => {
+  const handleDeleteItem = e => {
     e.stopPropagation();
     onDeleteButtonClick();
   }
@@ -30,7 +30,7 @@ const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButton
       </ContentContainer>
       <ButtonHolder>
         <CustomButton onClick={handleEditButtonClick}> Edit </CustomButton>
-        <CustomButton onClick={handleDeleteButtonClick}> Delete </CustomButton>
+        <CustomButton onClick={e => { if (window.confirm('Are you sure you wish to delete this item?')) handleDeleteItem(e) }}> Delete </CustomButton>
       </ButtonHolder>
     </MenuItemContainer>
   )

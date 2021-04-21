@@ -6,8 +6,9 @@ import {
   DialogActions,
   DialogContent,
 } from '@material-ui/core';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from "@material-ui/core/styles";
+import { removeItem } from '../../redux/directory/directory.actions';
 
 const useStyles = makeStyles(theme => {
   const light = theme.palette.type === "light";
@@ -27,8 +28,13 @@ const useStyles = makeStyles(theme => {
 const ItemDetail = ({ handleClose, onEditMode }) => {
   
   const classes = useStyles();
+  const dispatch = useDispatch();
   const { item, categories } = useSelector(state => state.item);
-  const { title, description } = item;
+  const { id, title, description } = item;
+
+  const handleDeleteItem = () => {
+    dispatch(removeItem(id));
+  };
 
   return (
     <div>
@@ -56,6 +62,9 @@ const ItemDetail = ({ handleClose, onEditMode }) => {
           </Button>
           <Button onClick={() => onEditMode(item, item.id, item.title)} color="primary">
             Edit
+          </Button>
+          <Button onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) handleDeleteItem() }}>
+            Delete
           </Button>
         </DialogActions>
       </form>

@@ -37,6 +37,7 @@ export const ContentContainer = styled.div`
   align-items: center;
   justify-content: center;
   opacity: 1;
+  display: flex;
 `;
 
 export const ContentTitle = styled.span`

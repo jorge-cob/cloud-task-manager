@@ -17,11 +17,6 @@ export const addCategoryToFilter = (filteredCategories, payload) => {
   return [...filteredCategories, payload]
 };
 
-export const removeCategoryFromFilter = (filteredCategories, payload) => {
-  return filteredCategories.filter(categoryId => categoryId !== payload);
-};
+export const removeCategoryFromFilter = (filteredCategories, payload) => filteredCategories.filter(categoryId => categoryId !== payload);
 
-export const removeItem = (directoryItems, payload) => {
-  console.log(payload);
-  return directoryItems.filter(item => item.id !== payload);
-};
+export const removeItem = (directoryItems, payload) => directoryItems.filter(item => item.id !== payload);
