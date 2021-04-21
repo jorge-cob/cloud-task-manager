@@ -13,6 +13,16 @@ export const selectDirectoryFilteredCategories = createSelector(
   directory => directory.filteredCategories
 )
 
+export const selectDirectoryFilteredStatus = createSelector(
+  [selectDirectory],
+  directory => directory.statusFilter
+);
+
+export const selectDirectoryIsTodoFiltered = createSelector(
+  [selectDirectory],
+  directory => directory.isTodoFilter
+);
+
 export const selectItemDetails = memoize((itemId) => 
   createSelector(
     [selectDirectory],
@@ -22,7 +32,7 @@ export const selectItemDetails = memoize((itemId) =>
   )
 );
 
-  export const selectIsDirectoryFetching = createSelector(
-    [selectDirectory],
-    directory => directory.isFetching
-  );  
+export const selectIsDirectoryFetching = createSelector(
+  [selectDirectory],
+  directory => directory.isFetching
+);  

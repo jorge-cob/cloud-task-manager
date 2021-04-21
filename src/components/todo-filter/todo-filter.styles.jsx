@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const TodoMenuContainer = styled.div`
   margin-bottom: 30px;
+
 `;
 
 export const TodoChip = styled(Chip)`
@@ -18,4 +19,6 @@ export const TodoChipContainer = styled.div`
 export const TodoStatusContainer = styled.div`
   flex-direction: column;
   width: 160px;
+  position: absolute;
+
 `;

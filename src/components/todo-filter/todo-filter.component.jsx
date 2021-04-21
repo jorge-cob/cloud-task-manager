@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { addStatusFilter, removeStatusFilter, toggleTodoFilter } from '../../redux/directory/directory.actions';
+import { selectDirectoryFilteredStatus, selectDirectoryIsTodoFiltered } from '../../redux/directory/directory.selectors';
 
 import { TodoChip, TodoMenuContainer, TodoChipContainer, TodoStatusContainer } from './todo-filter.styles';
 
@@ -9,9 +10,9 @@ import { TodoChip, TodoMenuContainer, TodoChipContainer, TodoStatusContainer } f
 const TodoFilter = () => {
 
   const dispatch = useDispatch();
-  
-  const isTodo = useSelector(state => state.directory.isTodoFilter);
-  const filteredStatus = useSelector(state => state.directory.statusFilter);
+
+  const isTodo = useSelector(selectDirectoryIsTodoFiltered);
+  const filteredStatus = useSelector(selectDirectoryFilteredStatus);
 
   const handleToggleStatus = statusId => {
     if (!filteredStatus.includes(statusId)) {

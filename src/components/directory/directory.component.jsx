@@ -2,32 +2,31 @@ import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import {
-  Button
-} from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
-import { selectDirectoryFilteredCategories, selectDirectoryItems } from '../../redux/directory/directory.selectors';
+import { selectDirectoryFilteredCategories, selectDirectoryFilteredStatus, selectDirectoryItems, selectDirectoryIsTodoFiltered } from '../../redux/directory/directory.selectors';
 import { addNewItem, removeItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
-
 
 import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-buttons.component';
 import Popup1 from '../popup/popup.component';
 import ItemDetail from '../item-detail/item-detail.component';
 import ItemEdit from '../item-edit/item-edit.component';
 import CategoryFilter from '../category-filter/category-filter.component';
-
-import { DirectoryMenuContainer } from './directory.styles';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
 import CategoryPopup from '../category-popup/category-popup.component';
 import TodoFilter from '../todo-filter/todo-filter.component';
 
+import { DirectoryMenuContainer, DirectoryContainer } from './directory.styles';
+
 
 const Directory = () => {
 
-  const {items, filteredCategories} = useSelector(createStructuredSelector({
+  const {items, filteredCategories, isTodoFilter, filteredStatus} = useSelector(createStructuredSelector({
     items: selectDirectoryItems,
-    filteredCategories: selectDirectoryFilteredCategories
+    filteredCategories: selectDirectoryFilteredCategories,
+    isTodoFilter: selectDirectoryIsTodoFiltered,
+    filteredStatus: selectDirectoryFilteredStatus
   }));
   const dispatch = useDispatch();
 
@@ -83,16 +82,19 @@ const Directory = () => {
 
 
   return (
-    <div style={{width: '100%'}}>
+    <DirectoryContainer>
       <CategoryFilter />
       <TodoFilter />
       <DirectoryMenuContainer>
         { 
           items.map((item) => {
-            const { id, title, categories, ...otherItemsProps } = item;
-            const isFiltered = filteredCategories.length == 0 || categories && categories.some(v=> filteredCategories.indexOf(v) !== -1);
+            const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
+            const isFiltered = filteredCategories.length == 0 || ( categories && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
+            const statusIsFiltered = (filteredStatus.length == 0 || filteredStatus.indexOf(item.status) !== -1);
+            const isTodoFiltered = statusIsFiltered && (item.isTodo && isTodoFilter) || !isTodoFilter;
           return (
-            isFiltered && 
+            isFiltered 
+            && isTodoFiltered &&
             <MenuItemWithButtons 
               key={id} 
               title={title.toUpperCase()}
@@ -121,7 +123,7 @@ const Directory = () => {
             + Category
           </Button>
         </div>
-    </div>
+    </DirectoryContainer>
   );
 }
 

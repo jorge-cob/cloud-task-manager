@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   statusFilter: [],
   isTodoFilter: false,
 };
+
 const directoryReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case DirectoryActionTypes.FETCH_ITEMS_START:
@@ -46,7 +47,6 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         filteredCategories: state.filteredCategories.filter(status => status !== action.payload)
       }
-
     case DirectoryActionTypes.TOGGLE_TODO_FILTER:
       return {
         ...state,
@@ -62,7 +62,6 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         statusFilter: state.statusFilter.filter(status => status !== action.payload)
       }
-
     default:
       return state;
   }
