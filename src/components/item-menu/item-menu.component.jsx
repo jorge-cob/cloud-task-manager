@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {
   Menu,
+  Popper
 } from '@material-ui/core';
 import { ReactComponent as IconMenuMoreOptions } from '../../assets/svg/iconMenuMoreOptions.svg';
 import IconButton48x48 from '../icon-button/icon-button.component';
@@ -28,6 +29,9 @@ function ItemMenu (props) {
     ...passedProps
   } = props;
   const iconRef = useRef();
+  const handleClickAwayEvent = e => {
+    e.stopPropagation();
+  }
 
   return (
     <div>
@@ -42,14 +46,16 @@ function ItemMenu (props) {
       >
         <IconChildren />
       </Icon>
-      <StyledMenuItem
-        {...passedProps}
-        open={open}
-        onClose={onClose}
-        anchorEl={() => iconRef.current}
-      >
-        {children}
-      </StyledMenuItem>
+      <Popper open={open} anchorEl={iconRef.current} onClick={handleClickAwayEvent}  role={undefined} transition disablePortal>
+        <StyledMenuItem
+          {...passedProps}
+          open={open}
+          onClose={onClose}
+          anchorEl={() => iconRef.current}
+        >
+          {children}
+        </StyledMenuItem>
+      </Popper>
     </div>
   );
 }
