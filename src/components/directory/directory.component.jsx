@@ -108,6 +108,7 @@ const Directory = () => {
     dispatch(removeItem(id));
   };
 
+  let filteredItemCount = 0;
 
   return (
     <DirectoryContainer>
@@ -117,25 +118,37 @@ const Directory = () => {
         { 
           items.map((item) => {
             const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
-            const isFiltered = filteredCategories.length == 0 || ( categories && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-            const statusIsFiltered = (filteredStatus.length == 0 || filteredStatus.indexOf(item.status) !== -1);
-            const isTodoFiltered = statusIsFiltered && (item.isTodo && isTodoFilter) || !isTodoFilter;
+            const isCategoryFiltered = filteredCategories.length == 0 
+              || (categories 
+                && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) 
+                );
+            const statusIsFiltered = (filteredStatus.length == 0 
+              || filteredStatus.indexOf(item.status) !== -1
+              );
+            const isTodoFiltered = statusIsFiltered 
+            && (item.isTodo && isTodoFilter) 
+            || !isTodoFilter;
+            const isFiltered = isCategoryFiltered && isTodoFiltered;
             const icon = item.isTodo && getStatusIcon(item.status);
-          return (
-            isFiltered 
-            && isTodoFiltered &&
-            <MenuItemWithButtons 
-              key={id} 
-              title={title.toUpperCase()}
-              onClick={() => handleClickOpenDetailPopup(item)}
-              onEditButtonClick={() => handleClickOpenEditPopup(item)}
-              onDeleteButtonClick={() => handleClickDeleteItem(id)}
-              Icon={icon}
-              Menu={ItemManagerItemMoreOptions}
-              {...otherItemsProps}
-            />
-          )
-        })
+            if (isFiltered) filteredItemCount++;
+            return (
+              isFiltered &&
+              <MenuItemWithButtons 
+                key={id} 
+                title={title.toUpperCase()}
+                onClick={() => handleClickOpenDetailPopup(item)}
+                onEditButtonClick={() => handleClickOpenEditPopup(item)}
+                onDeleteButtonClick={() => handleClickDeleteItem(id)}
+                Icon={icon}
+                Menu={ItemManagerItemMoreOptions}
+                {...otherItemsProps}
+              />
+            )
+          })
+        }
+        {
+          filteredItemCount == 0 && 
+          <div style={{height: '80px'}}> No categories with current filters </div>
         }
         <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={selectedItem && selectedItem.title.toUpperCase()} icon={selectedIcon}>
           <ItemDetail handleClose={handleCloseDetailPopup} onEditMode={handleClickOpenEditPopup} />
