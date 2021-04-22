@@ -23,6 +23,7 @@ import { ReactComponent as IconDone } from '../../assets/svg/calendar-check-regu
 import { ReactComponent as IconDiscarded } from '../../assets/svg/calendar-times-regular.svg';
 
 import { DirectoryMenuContainer, DirectoryContainer } from './directory.styles';
+import ItemManagerItemMoreOptions from '../item-manager/item-manager-menu.component';
 
 const useStyles = makeStyles({
   iconMenuItem: {
@@ -53,7 +54,7 @@ const Directory = () => {
       default:
         return null;
     }
-  }
+  };
   
   const dispatch = useDispatch();
 
@@ -85,6 +86,7 @@ const Directory = () => {
     dispatch(fetchItemCategoriesStart(item.id));
     handleCloseDetailPopup();
     setSelectedItem(item);
+    setSelectedIcon(getStatusIcon(item.status));
     setIsEditPopupOpen(true);
   };
 
@@ -129,6 +131,7 @@ const Directory = () => {
               onEditButtonClick={() => handleClickOpenEditPopup(item)}
               onDeleteButtonClick={() => handleClickDeleteItem(id)}
               Icon={icon}
+              Menu={ItemManagerItemMoreOptions}
               {...otherItemsProps}
             />
           )

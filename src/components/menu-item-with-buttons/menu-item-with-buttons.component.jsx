@@ -1,8 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import CustomButton from '../custom-button/custom-button.component';
-
 import {
   MenuItemContainer,
   ContentContainer,
@@ -10,7 +8,7 @@ import {
   ButtonHolder
 } from './menu-item-with-buttons.styles';
 
-const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButtonClick, Icon }) => {
+const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteButtonClick, Icon, Menu }) => {
 
   const handleEditButtonClick = e => {
     e.stopPropagation();
@@ -30,8 +28,7 @@ const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButton
         <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
       <ButtonHolder>
-        <CustomButton onClick={handleEditButtonClick}> Edit </CustomButton>
-        <CustomButton onClick={e => { if (window.confirm('Are you sure you wish to delete this item?')) handleDeleteItem(e) }}> Delete </CustomButton>
+        <Menu id={id} onEdit={handleEditButtonClick} onDelete={e => { if (window.confirm('Are you sure you wish to delete this item?')) handleDeleteItem(e) }} />
       </ButtonHolder>
     </MenuItemContainer>
   )
