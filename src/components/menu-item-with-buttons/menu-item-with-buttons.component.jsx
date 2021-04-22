@@ -10,7 +10,7 @@ import {
   ButtonHolder
 } from './menu-item-with-buttons.styles';
 
-const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButtonClick }) => {
+const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButtonClick, Icon }) => {
 
   const handleEditButtonClick = e => {
     e.stopPropagation();
@@ -26,6 +26,7 @@ const MenuItemWithButtons = ({ title, onClick, onEditButtonClick, onDeleteButton
       onClick={onClick}
     >
       <ContentContainer>
+      {Icon}
         <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
       <ButtonHolder>

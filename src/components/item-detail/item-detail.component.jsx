@@ -7,7 +7,8 @@ import {
   DialogContent,
 } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
+
 import { removeItem } from '../../redux/directory/directory.actions';
 
 const useStyles = makeStyles(theme => {
@@ -21,16 +22,16 @@ const useStyles = makeStyles(theme => {
         borderBottom: `1px solid ${bottomLineColor}`,
         transform: "scaleX(0)",
       }
-    }
+    },
   };
 });
 
 const ItemDetail = ({ handleClose, onEditMode }) => {
   
-  const classes = useStyles();
+  const { underline } = useStyles();
   const dispatch = useDispatch();
-  const { item, categories } = useSelector(state => state.item);
-  const { id, title, description } = item;
+  const { item } = useSelector(state => state.item);
+  const { id, title, description, isTodo, status } = item;
 
   const handleDeleteItem = () => {
     dispatch(removeItem(id));
@@ -39,23 +40,22 @@ const ItemDetail = ({ handleClose, onEditMode }) => {
   return (
     <div>
       <form  noValidate>
-      <DialogContent>
-      <TextField
-        inputProps={{ readOnly: true }}
-        InputProps={{ classes }}
-        fullWidth
-        value={title}
-      />
-      <TextField
-        inputProps={{ readOnly: true }}
-        InputProps={{ classes }}
-        margin="dense"
-        multiline
-        fullWidth
-        value={description || 'No content'}
-      />
-  
-    </DialogContent>
+        <DialogContent>
+          <TextField
+            inputProps={{ readOnly: true }}
+            InputProps={{ underline }}
+            fullWidth
+            value={title}
+          />
+          <TextField
+            inputProps={{ readOnly: true }}
+            InputProps={{ underline }}
+            margin="dense"
+            multiline
+            fullWidth
+            value={description || 'No content'}
+          />
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Close

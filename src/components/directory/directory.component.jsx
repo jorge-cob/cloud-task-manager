@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
 import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 import { selectDirectoryFilteredCategories, selectDirectoryFilteredStatus, selectDirectoryItems, selectDirectoryIsTodoFiltered } from '../../redux/directory/directory.selectors';
 import { addNewItem, removeItem } from '../../redux/directory/directory.actions';
@@ -17,8 +18,18 @@ import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-w
 import CategoryPopup from '../category-popup/category-popup.component';
 import TodoFilter from '../todo-filter/todo-filter.component';
 
+import { ReactComponent as IconPending } from '../../assets/svg/calendar-regular.svg';
+import { ReactComponent as IconDone } from '../../assets/svg/calendar-check-regular.svg';
+import { ReactComponent as IconDiscarded } from '../../assets/svg/calendar-times-regular.svg';
+
 import { DirectoryMenuContainer, DirectoryContainer } from './directory.styles';
 
+const useStyles = makeStyles({
+  iconMenuItem: {
+    marginRight: '20px',
+    width: '1.5rem',
+  },
+});
 
 const Directory = () => {
 
@@ -28,13 +39,29 @@ const Directory = () => {
     isTodoFilter: selectDirectoryIsTodoFiltered,
     filteredStatus: selectDirectoryFilteredStatus
   }));
+
+  const { iconMenuItem } = useStyles();
+
+  const getStatusIcon = status => {
+    switch (status) {
+      case 'pending':
+        return <IconPending className={iconMenuItem} fill={'red'} />;
+      case 'discarded':
+        return <IconDiscarded className={iconMenuItem} />
+      case 'done':
+        return <IconDone className={iconMenuItem} />
+      default:
+        return null;
+    }
+  }
+  
   const dispatch = useDispatch();
 
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
-  const [itemShowing, setItemShowing] = useState('');
-  const [itemTitle, setItemTitle] = useState('');
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
+  const [selectedIcon, setSelectedIcon] = useState({});
 
   const handleClickOpenCategoryPopup = e => {
     e.preventDefault();
@@ -45,20 +72,19 @@ const Directory = () => {
     setIsCategoryOpenPopup(false);
   };
   
-  const handleClickOpenDetailPopup = (item, id, title) => {
+  const handleClickOpenDetailPopup = item => {
     dispatch(setItem(item));
-    dispatch(fetchItemCategoriesStart(id));
-    setItemShowing(id);
-    setItemTitle(title);
+    dispatch(fetchItemCategoriesStart(item.id));
+    setSelectedItem(item);
+    setSelectedIcon(getStatusIcon(item.status));
     setIsDetailPopupOpen(true);
   };
 
-  const handleClickOpenEditPopup = (item, id, title) => {
+  const handleClickOpenEditPopup = item => {
     dispatch(setItem(item));
-    dispatch(fetchItemCategoriesStart(id));
+    dispatch(fetchItemCategoriesStart(item.id));
     handleCloseDetailPopup();
-    setItemShowing(id);
-    setItemTitle(title);
+    setSelectedItem(item);
     setIsEditPopupOpen(true);
   };
 
@@ -68,7 +94,7 @@ const Directory = () => {
 
   const handleEditItem = (categoryId, title, description, isTodo, status) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem(categoryId, itemShowing, title, description, isTodo, status));
+    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status));
   };
 
   const handleCloseEditPopup = () => {
@@ -92,24 +118,26 @@ const Directory = () => {
             const isFiltered = filteredCategories.length == 0 || ( categories && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
             const statusIsFiltered = (filteredStatus.length == 0 || filteredStatus.indexOf(item.status) !== -1);
             const isTodoFiltered = statusIsFiltered && (item.isTodo && isTodoFilter) || !isTodoFilter;
+            const icon = item.isTodo && getStatusIcon(item.status);
           return (
             isFiltered 
             && isTodoFiltered &&
             <MenuItemWithButtons 
               key={id} 
               title={title.toUpperCase()}
-              onClick={() => handleClickOpenDetailPopup(item, id, title)}
-              onEditButtonClick={() => handleClickOpenEditPopup(item, id, title)}
+              onClick={() => handleClickOpenDetailPopup(item)}
+              onEditButtonClick={() => handleClickOpenEditPopup(item)}
               onDeleteButtonClick={() => handleClickDeleteItem(id)}
+              Icon={icon}
               {...otherItemsProps}
             />
           )
         })
         }
-        <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={itemTitle.toUpperCase()} >
+        <Popup1 open={isDetailPopupOpen} handleClose={handleCloseDetailPopup} label={selectedItem && selectedItem.title.toUpperCase()} icon={selectedIcon}>
           <ItemDetail handleClose={handleCloseDetailPopup} onEditMode={handleClickOpenEditPopup} />
         </Popup1>
-        <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={itemTitle.toUpperCase()} >
+        <Popup1 open={isEditPopupOpen} handleClose={handleCloseEditPopup} label={selectedItem && selectedItem.title.toUpperCase()} icon={selectedIcon}>
           <ItemEdit handleClose={handleCloseEditPopup} handleSubmit={handleEditItem} />
         </Popup1>
         <CategoryPopup 

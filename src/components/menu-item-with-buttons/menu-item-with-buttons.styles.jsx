@@ -21,9 +21,7 @@ export const MenuItemContainer = styled.div`
 			opacity: 0.9;
 		}
 	}
-
 `;
-
 
 export const ContentContainer = styled.div`
   height: 50px;
