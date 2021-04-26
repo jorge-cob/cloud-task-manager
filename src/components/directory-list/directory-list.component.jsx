@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { 
   selectDirectoryFilteredCategories, 
@@ -34,42 +35,58 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     filteredStatus: selectDirectoryFilteredStatus
   }));
   return (
-    <div>
-      { 
-        items.map((item) => {
-          const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
-          const isCategoryFiltered = filteredCategories.length == 0 
-            || (categories 
-            && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-          const statusIsFiltered = (filteredStatus.length == 0 
-            || filteredStatus.indexOf(item.status) !== -1
-            );
-          const isTodoFiltered = statusIsFiltered 
-          && (item.isTodo && isTodoFilter) 
-          || !isTodoFilter;
-          const isFiltered = isCategoryFiltered && isTodoFiltered;
-          const icon = item.isTodo && getStatusIcon(item.status, iconMenuItem);
-          if (isFiltered) filteredItemCount++;
-          return (
-            isFiltered &&
-            <MenuItemWithButtons 
-              key={id} 
-              title={title.toUpperCase()}
-              onClick={() => handleClickOpenDetailPopup(item)}
-              onEditButtonClick={() => handleClickOpenEditPopup(item)}
-              onDeleteButtonClick={() => handleClickDeleteItem(id)}
-              Icon={icon}
-              Menu={ItemManagerItemMoreOptions}
-              {...otherItemsProps}
-            />
-          )
-        })
-      }
-      {
-        filteredItemCount == 0 && 
-        <div style={{height: '80px'}}> No categories with current filters </div>
-      }
-    </div>
+    <DragDropContext>
+      <Droppable droppableId="characters">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            { 
+              items.map((item, index) => {
+                const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
+                const isCategoryFiltered = filteredCategories.length == 0 
+                  || (categories 
+                  && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
+                const statusIsFiltered = (filteredStatus.length == 0 
+                  || filteredStatus.indexOf(status) !== -1
+                  );
+                const isTodoFiltered = statusIsFiltered 
+                && (isTodo && isTodoFilter) 
+                || !isTodoFilter;
+                const isFiltered = isCategoryFiltered && isTodoFiltered;
+                const icon = isTodo && getStatusIcon(status, iconMenuItem);
+                if (isFiltered) filteredItemCount++;
+                return (
+                  isFiltered &&
+                  <Draggable  key={id}  draggableId={id} index={index}>
+                    {(provided) => (
+                      <div 
+                        ref={provided.innerRef} 
+                        {...provided.draggableProps} 
+                        {...provided.dragHandleProps}
+                      >
+                        <MenuItemWithButtons 
+                          title={title.toUpperCase()}
+                          onClick={() => handleClickOpenDetailPopup(item)}
+                          onEditButtonClick={() => handleClickOpenEditPopup(item)}
+                          onDeleteButtonClick={() => handleClickDeleteItem(id)}
+                          Icon={icon}
+                          Menu={ItemManagerItemMoreOptions}
+                          {...otherItemsProps}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                )
+              })
+            }
+            {
+              filteredItemCount == 0 && 
+              <div style={{height: '80px'}}> No categories with current filters </div>
+            }
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
   );
 };
 

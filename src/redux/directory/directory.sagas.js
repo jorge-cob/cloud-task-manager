@@ -18,7 +18,7 @@ export function* fetchItemsAsync() {
     const userAuth = yield getCurrentUser();
     if (!userAuth) return;
     const userItemsRef = yield call(createUserItemsDocument, userAuth);
-    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('createdAt', 'asc').get();
+    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('createdAt', 'desc').get();
     const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
     const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
     yield put(fetchItemsSuccess(itemsWithCategoriesMap));
