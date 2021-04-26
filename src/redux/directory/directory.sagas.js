@@ -14,12 +14,11 @@ import DirectoryActionTypes from './directory.types';
 
 
 export function* fetchItemsAsync() {
-  yield console.log('I am fired looking for items');
   try {
     const userAuth = yield getCurrentUser();
     if (!userAuth) return;
     const userItemsRef = yield call(createUserItemsDocument, userAuth);
-    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).get();
+    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('createdAt', 'asc').get();
     const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
     const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
     yield put(fetchItemsSuccess(itemsWithCategoriesMap));
