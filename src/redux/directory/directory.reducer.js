@@ -14,7 +14,10 @@ const INITIAL_STATE = {
 const directoryReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case DirectoryActionTypes.FETCH_ITEMS_START:
-      return INITIAL_STATE
+      return {
+        ...state,
+        isFetching: true
+      }
     case DirectoryActionTypes.FETCH_ITEMS_SUCCESS:
       return {
         ...state,

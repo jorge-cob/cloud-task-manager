@@ -131,18 +131,6 @@ if (!firebase.apps.length) {
   firebase.app(); // if already initialized, use that one
 }
 
-export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
-  const collectionRef = firestore.collection(collectionKey);
-
-  const batch = firestore.batch();
-  objectsToAdd.forEach(obj => {
-    const newDocRef = collectionRef.doc();
-    batch.set(newDocRef, obj);
-  });
-
-  return await batch.commit();
-};
-
 export const convertCollectionsSnapshotTopMap = (collections) => {
   const transformedCollection = collections.docs.map(doc => {
     const { title, items } = doc.data();
@@ -172,7 +160,9 @@ export const getCurrentUser = () => {
 };
 
 export const addItemToDB = async (categoryId, newItemId, itemData) => {
-  await firestore.collection('items').doc(newItemId).set(itemData);
+  const createdAt = new Date();
+
+  await firestore.collection('items').doc(newItemId).set({...itemData, createdAt: createdAt});
   const junctions = await firestore
   .collection(`junction_category_item`)
   .where("itemId", "==", newItemId)
@@ -185,7 +175,7 @@ export const addItemToDB = async (categoryId, newItemId, itemData) => {
   );
   return categoryId.forEach(async cat => {
     const junctionRef = firestore.doc(`junction_category_item/${cat}_${newItemId}`);
-    await junctionRef.set({ categoryId: cat, itemId: newItemId });
+    await junctionRef.set({ categoryId: cat, itemId: newItemId, createdAt: createdAt });
   })
 };
 
@@ -204,9 +194,10 @@ export const removeItemFromDB = async (itemId) => {
 
 
 export const addCategoryToDb = async (userId, newItemId, itemData) => {
+  const createdAt = new Date();
   const junctionRef = firestore.doc(`junction_user_category/${userId}_${newItemId}`);
-  await junctionRef.set({ userId, categoryId: newItemId });
-  return await firestore.collection('categories').doc(newItemId).set(itemData);
+  await junctionRef.set({ userId, categoryId: newItemId, createdAt: createdAt });
+  return await firestore.collection('categories').doc(newItemId).set({...itemData, createdAt: createdAt});
 };
 
 export const auth = firebase.auth();

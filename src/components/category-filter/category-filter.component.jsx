@@ -36,7 +36,7 @@ const CategoryFilter = () => {
             <CategoryChip 
               key={category.id} 
               label={category.title} 
-              color={`${filteredCategories.includes(category.id) ? 'primary' : 'default'}`} 
+              color={`${filteredCategories && filteredCategories.includes(category.id) ? 'primary' : 'default'}`} 
               onClick={() => handleFilteredCategories(category.id)}
             />
           )

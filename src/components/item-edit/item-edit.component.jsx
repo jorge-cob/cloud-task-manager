@@ -64,6 +64,10 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
     setCategory(value);
   };
 
+  const handleChangeStatus = e => {
+    setStatus(e.target.value);
+  }
+
   return (
     <div>
     <form  noValidate>
@@ -95,7 +99,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
           label='Is To Do'
           isChecked={isTodo}
           onChangeCheck={e => setIsTodo(e.target.checked)}
-          onChangeDropdown={e => setStatus(e.target.value)}
+          onChangeDropdown={handleChangeStatus}
           selectedOption={status}
           dropdownLabel='Status'
           options={{ 

@@ -21,7 +21,7 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ title, setTitle ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ isTodo, setIsTodo ] = useState(false);
-  const [ status, setStatus ] = useState('pending');
+  const [ status, setStatus ] = useState('');
   const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = React.useState("");
 
