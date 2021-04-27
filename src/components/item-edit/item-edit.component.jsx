@@ -39,7 +39,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status);
+      handleSubmit(category, title, description, isTodo, status, item.index);
     }
 
   };

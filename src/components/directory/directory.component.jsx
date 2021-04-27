@@ -74,13 +74,13 @@ const Directory = () => {
   };
 
   const handleClickDeleteItem = id => {
-    setIsDetailPopupOpen(false);
+    handleCloseDetailPopup();
     dispatch(removeItem(id));
   };
 
-  const handleEditItem = (categoryId, title, description, isTodo, status) => {
+  const handleEditItem = (categoryId, title, description, isTodo, status, index) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status));
+    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status, index));
   };
   
   return (

@@ -5,12 +5,11 @@ import {
   addItemToDB, 
   createUserItemsDocument,
   getItemCategories,
-  removeItemFromDB
+  removeItemFromDB,
 } from '../../firebase/firebase.utils';
 import { fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
 
 import DirectoryActionTypes from './directory.types';
-
 
 
 export function* fetchItemsAsync() {
@@ -18,7 +17,7 @@ export function* fetchItemsAsync() {
     const userAuth = yield getCurrentUser();
     if (!userAuth) return;
     const userItemsRef = yield call(createUserItemsDocument, userAuth);
-    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('createdAt', 'desc').get();
+    const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('index', 'desc').get();
     const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
     const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
     yield put(fetchItemsSuccess(itemsWithCategoriesMap));
@@ -36,13 +35,25 @@ export function* fetchItemsStart() {
 
 export function* addNewItem(action) {
   const userAuth = yield getCurrentUser();
-  const { categoryId, newItemId, title, description, isTodo, status } = action.payload;
+  const { categoryId, newItemId, title, description, isTodo, status, index } = action.payload;
+  const userItemsRef = yield call(createUserItemsDocument, userAuth);
+  const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('index', 'desc').get();
+  const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
+  const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
+  let computedIndex = index;
+  if (!index && itemsWithCategoriesMap.length === 0) {
+    computedIndex = 1000;
+  } else if (!index) {
+    computedIndex = itemsWithCategoriesMap[0].index + 1000;
+  }
+
   const itemData = {
     userId: userAuth.uid,
     title,
     isTodo,
     status,
-    description
+    description,
+    index: computedIndex
   };
   yield call(addItemToDB, categoryId, newItemId, itemData);
 };

@@ -42,15 +42,15 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             { 
               items.map((item, index) => {
                 const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
-                const isCategoryFiltered = filteredCategories.length == 0 
+                const isCategoryFiltered = filteredCategories.length === 0 
                   || (categories 
                   && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-                const statusIsFiltered = (filteredStatus.length == 0 
+                const statusIsFiltered = (filteredStatus.length === 0 
                   || filteredStatus.indexOf(status) !== -1
                   );
                 const isTodoFiltered = statusIsFiltered 
-                && (isTodo && isTodoFilter) 
-                || !isTodoFilter;
+                && ((isTodo && isTodoFilter) 
+                || !isTodoFilter);
                 const isFiltered = isCategoryFiltered && isTodoFiltered;
                 const icon = isTodo && getStatusIcon(status, iconMenuItem);
                 if (isFiltered) filteredItemCount++;
@@ -79,7 +79,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
               })
             }
             {
-              filteredItemCount == 0 && 
+              filteredItemCount === 0 && 
               <div style={{height: '80px'}}> No categories with current filters </div>
             }
             {provided.placeholder}

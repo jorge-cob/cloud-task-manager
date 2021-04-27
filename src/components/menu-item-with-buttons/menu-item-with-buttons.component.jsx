@@ -7,18 +7,8 @@ import {
   ContentTitle,
   ButtonHolder
 } from './menu-item-with-buttons.styles';
-import {LexoRank} from "lexorank";
 
 const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteButtonClick, Icon, Menu }) => {
-  const lexoRank = LexoRank.middle();
-  const prevLexoRank = lexoRank.genPrev();
-  const prevLexoRank2 = lexoRank.genPrev();
-  const prevprevLexoRank = lexoRank.genPrev().genPrev();
-
-  console.log('lexoRank', lexoRank);
-  console.log('prevLexoRank', prevLexoRank);
-  console.log('prevLexoRank2', prevLexoRank2);
-  console.log('prevprevLexoRank', prevprevLexoRank);
 
   const handleEditButtonClick = e => {
     e.stopPropagation();

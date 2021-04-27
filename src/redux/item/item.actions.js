@@ -1,7 +1,5 @@
 import ItemActionTypes from './item.types';
 
-import { firestore } from '../../firebase/firebase.utils';
-
 
 export const setItem = item => ({
   type: ItemActionTypes.SET_ITEM,

@@ -1,9 +1,7 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { 
   getCurrentUser, 
-  convertCategoriesSnapshotToMap,
   addCategoryToDb, 
-  createUserCategoriesDocument,
   fetchCategories
 } from '../../firebase/firebase.utils';
 import { fetchCategoriesFailure, fetchCategoriesSuccess } from './category.actions';
