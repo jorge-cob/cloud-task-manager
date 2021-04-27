@@ -16,7 +16,6 @@ const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteBu
   };
 
   const handleDeleteItem = e => {
-    e.stopPropagation();
     onDeleteButtonClick();
   }
   return (

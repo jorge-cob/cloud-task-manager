@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-const ItemDetail = ({ handleClose, onEditMode }) => {
+const ItemDetail = ({ handleClose, onEditMode, onDeleteItem }) => {
   
   const { underline } = useStyles();
   const dispatch = useDispatch();
@@ -35,6 +35,7 @@ const ItemDetail = ({ handleClose, onEditMode }) => {
 
   const handleDeleteItem = () => {
     dispatch(removeItem(id));
+    handleClose();
   };
 
   return (

@@ -76,6 +76,7 @@ const Directory = () => {
   const handleClickDeleteItem = id => {
     handleCloseDetailPopup();
     dispatch(removeItem(id));
+    console.log('isDetailPopupOpen', isDetailPopupOpen);
   };
 
   const handleEditItem = (categoryId, title, description, isTodo, status, index) => {
@@ -97,6 +98,7 @@ const Directory = () => {
           open={isDetailPopupOpen}
           onCloseDetail={handleCloseDetailPopup}
           onOpenEdit={handleClickOpenEditPopup}
+          onDeleteItem={handleClickDeleteItem}
           item={selectedItem && selectedItem.title.toUpperCase()}
           icon={selectedIcon}
         />

@@ -7,12 +7,13 @@ const DetailPopup = props => {
     open,
     onCloseDetail,
     onOpenEdit,
+    onDeleteItem,
     item,
     icon
   } = props;
   return (
     <Popup1 open={open} handleClose={onCloseDetail} label={item} icon={icon}>
-      <ItemDetail handleClose={onCloseDetail} onEditMode={onOpenEdit} />
+      <ItemDetail handleClose={onCloseDetail} onEditMode={onOpenEdit} onDeleteItem={onDeleteItem} />
     </Popup1>
   );
 };
