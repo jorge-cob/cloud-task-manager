@@ -65,6 +65,11 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         statusFilter: state.statusFilter.filter(status => status !== action.payload)
       }
+    case DirectoryActionTypes.SET_ITEMS:
+      return {
+        ...state,
+        items: action.payload.items
+      }
     default:
       return state;
   }

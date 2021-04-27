@@ -6,6 +6,7 @@ import {
   createUserItemsDocument,
   getItemCategories,
   removeItemFromDB,
+  changeItemIndex,
 } from '../../firebase/firebase.utils';
 import { fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
 
@@ -32,6 +33,7 @@ export function* fetchItemsStart() {
     fetchItemsAsync
   )
 };
+
 
 export function* addNewItem(action) {
   const userAuth = yield getCurrentUser();
@@ -76,11 +78,24 @@ export function* removeItem() {
   )
 }
 
+export function* reorderIndex(action) {
+  const { itemToChangeIndex, newIndex } = action.payload;
+  yield call(changeItemIndex, itemToChangeIndex, newIndex)
+}
+
+export function* reindexItem() {
+  yield takeLatest(
+    DirectoryActionTypes.SET_ITEMS,
+    reorderIndex
+  )
+}
+
 
 export function* directorySagas() {
   yield all([
     call(fetchItemsStart),
     call(addItem),
-    call(removeItem)
+    call(removeItem),
+    call(reindexItem)
   ]);
 };

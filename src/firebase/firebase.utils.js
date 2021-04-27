@@ -202,6 +202,12 @@ export const addCategoryToDb = async (userId, newItemId, itemData) => {
   return await firestore.collection('categories').doc(newItemId).set({...itemData, createdAt: createdAt});
 };
 
+export const changeItemIndex = async (itemToChangeIndex, newIndex) => {
+  return await firestore.collection('items').doc(itemToChangeIndex).update({
+    index: newIndex
+  });
+}
+
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 

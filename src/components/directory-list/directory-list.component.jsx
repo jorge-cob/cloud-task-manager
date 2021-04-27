@@ -1,5 +1,5 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -15,6 +15,7 @@ import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-button
 import ItemManagerItemMoreOptions from '../item-manager/item-manager-menu.component';
 
 import { getStatusIcon } from '../directory/directory.helpers';
+import { setItems } from '../../redux/directory/directory.actions';
 
 const useStyles = makeStyles({
   iconMenuItem: {
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
 const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, handleClickDeleteItem}) => {
   let filteredItemCount = 0;
   const { iconMenuItem } = useStyles();
+  const dispatch = useDispatch();
 
 
   const {items, filteredCategories, isTodoFilter, filteredStatus} = useSelector(createStructuredSelector({
@@ -34,13 +36,32 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     isTodoFilter: selectDirectoryIsTodoFiltered,
     filteredStatus: selectDirectoryFilteredStatus
   }));
+
+  const [draggableItems, setDraggableItems] = useState([]);
+
+  useEffect(() => {
+    setDraggableItems(items);
+  }, [items]);
+
+  function handleOnDragEnd(result) {
+    let dragItems = draggableItems;
+    const destinationIndex = dragItems[result.destination.index].index;
+    const nextItemIndex = dragItems.length > result.destination.index + 1 ? dragItems[result.destination.index + 1].index : destinationIndex - 1000;
+    const newItemIndex = (destinationIndex + nextItemIndex) / 2;
+    dragItems[result.source.index].index = newItemIndex;
+    const [reorderedItem] = dragItems.splice(result.source.index, 1);
+    dragItems.splice(result.destination.index, 0, reorderedItem);
+    dispatch(setItems(dragItems, result.draggableId, newItemIndex));
+    setDraggableItems(dragItems);
+  }
+  
   return (
-    <DragDropContext>
-      <Droppable droppableId="characters">
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <Droppable droppableId="items">
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             { 
-              items.map((item, index) => {
+              draggableItems.map((item, index) => {
                 const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
                 const isCategoryFiltered = filteredCategories.length === 0 
                   || (categories 

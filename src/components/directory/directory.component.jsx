@@ -32,7 +32,6 @@ const Directory = () => {
 
   const { iconMenuItem } = useStyles();
   const dispatch = useDispatch();
-
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
@@ -76,7 +75,6 @@ const Directory = () => {
   const handleClickDeleteItem = id => {
     handleCloseDetailPopup();
     dispatch(removeItem(id));
-    console.log('isDetailPopupOpen', isDetailPopupOpen);
   };
 
   const handleEditItem = (categoryId, title, description, isTodo, status, index) => {
