@@ -21,7 +21,7 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ title, setTitle ] = useState('');
   const [ description, setDescription ] = useState('');
   const [ isTodo, setIsTodo ] = useState(false);
-  const [ status, setStatus ] = useState('');
+  const [ status, setStatus ] = useState('pending');
   const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = React.useState("");
 
@@ -78,6 +78,7 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
           isChecked={isTodo}
           onChangeCheck={e => setIsTodo(e.target.checked)}
           onChangeDropdown={e => setStatus(e.target.value)}
+          selectedOption={status}
           dropdownLabel='Status'
           options={{ 
             pending: 'Pending',

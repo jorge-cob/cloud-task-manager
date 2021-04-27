@@ -109,7 +109,7 @@ const Directory = () => {
         />
       </DirectoryMenuContainer>
         <div style={{display: 'flex'}}>
-          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' onOpenCategoryPopup={() => setIsCategoryOpenPopup(true)} />
+          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' onOpenCategoryPopup={handleClickOpenCategoryPopup} />
           <Button onClick={handleClickOpenCategoryPopup} color="primary">
             + Category
           </Button>
