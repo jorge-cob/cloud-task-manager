@@ -64,11 +64,22 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   const [activeId, setActiveId] = useState(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  function handleClick(item) {
+    if (!activeId) {
+      handleClickOpenDetailPopup(item);
+    }
+    setActiveId(null);
+  }
 
   return (
     <DndContext 
@@ -92,7 +103,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
               showItem && 
                 <SortableMenuItemWithButtons 
                   title={title.toUpperCase()}
-                  onClick={() => {}}
+                  onClick={() => handleClick(item)}
                   onEditButtonClick={() => handleClickOpenEditPopup(item)}
                   onDeleteButtonClick={() => handleClickDeleteItem(id)}
                   Icon={icon}
@@ -113,8 +124,8 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             id={activeId} 
             title={draggingItem.title.toUpperCase()}
             onClick={() => {}}
-            onEditButtonClick={() => handleClickOpenEditPopup(draggingItem)}
-            onDeleteButtonClick={() => handleClickDeleteItem(activeId)}
+            onEditButtonClick={() => {}}
+            onDeleteButtonClick={() => {}}
             Icon={draggingItem.isTodo && getStatusIcon(draggingItem.status, iconMenuItem)}
             Menu={ItemManagerItemMoreOptions} 
             
@@ -127,11 +138,9 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
 
   function handleDragStart(event) {
     const {active} = event;
-      setActiveId(active.id);
-      const selectedItem = items.filter(obj => obj.id === active.id);
-      setDraggingItem(selectedItem[0]);
-
-    
+    setActiveId(active.id);
+    const selectedItem = items.filter(obj => obj.id === active.id);
+    setDraggingItem(selectedItem[0]);
   }
   
   function handleDragEnd(event) {
@@ -147,7 +156,6 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         setDraggableItems(newItemArray);
         dispatch(setItems(newItemArray, active.id, newItemIndex)); 
     }
-    setActiveId(null);
   }
 };
 
