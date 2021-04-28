@@ -11,16 +11,8 @@ export const MenuItemContainer = styled.div`
   border: 1px solid black;
   margin: 15px 0;
   overflow: hidden;
-  &:hover {
-		cursor: pointer;
-		& .background-image {
-			transform: scale(1.1);
-			transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
-		}
-		& .content {
-			opacity: 0.9;
-		}
-	}
+  visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
+ 
 `;
 
 export const ContentContainer = styled.div`

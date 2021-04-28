@@ -2,7 +2,29 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { makeStyles } from '@material-ui/core/styles';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+import {
+  closestCenter,
+  DndContext, 
+  DragOverlay,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'; 
+
+
+import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-buttons.component';
+import SortableMenuItemWithButtons from '../menu-item-with-buttons/sortable-menu-item-with-buttons.component';
+import ItemManagerItemMoreOptions from '../item-manager/item-manager-menu.component';
+
+import { getStatusIcon } from '../directory/directory.helpers';
 
 import { 
   selectDirectoryFilteredCategories, 
@@ -10,12 +32,8 @@ import {
   selectDirectoryItems, 
   selectDirectoryIsTodoFiltered 
 } from '../../redux/directory/directory.selectors';
-
-import MenuItemWithButtons from '../menu-item-with-buttons/menu-item-with-buttons.component';
-import ItemManagerItemMoreOptions from '../item-manager/item-manager-menu.component';
-
-import { getStatusIcon } from '../directory/directory.helpers';
 import { setItems } from '../../redux/directory/directory.actions';
+import { itemIsBeingShown } from '../../redux/directory/directory.utils';
 
 const useStyles = makeStyles({
   iconMenuItem: {
@@ -25,10 +43,8 @@ const useStyles = makeStyles({
 });
 
 const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, handleClickDeleteItem}) => {
-  let filteredItemCount = 0;
   const { iconMenuItem } = useStyles();
   const dispatch = useDispatch();
-
 
   const {items, filteredCategories, isTodoFilter, filteredStatus} = useSelector(createStructuredSelector({
     items: selectDirectoryItems,
@@ -36,79 +52,103 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     isTodoFilter: selectDirectoryIsTodoFiltered,
     filteredStatus: selectDirectoryFilteredStatus
   }));
-
+  
   const [draggableItems, setDraggableItems] = useState([]);
+  const [draggingItem, setDraggingItem] = useState({});
 
   useEffect(() => {
     setDraggableItems(items);
-  }, [items]);
+  }, [items])
+ 
 
-  function handleOnDragEnd(result) {
-    let dragItems = draggableItems;
-    const destinationIndex = dragItems[result.destination.index].index;
-    const nextItemIndex = dragItems.length > result.destination.index + 1 ? dragItems[result.destination.index + 1].index : destinationIndex - 1000;
-    const newItemIndex = (destinationIndex + nextItemIndex) / 2;
-    dragItems[result.source.index].index = newItemIndex;
-    const [reorderedItem] = dragItems.splice(result.source.index, 1);
-    dragItems.splice(result.destination.index, 0, reorderedItem);
-    dispatch(setItems(dragItems, result.draggableId, newItemIndex));
-    setDraggableItems(dragItems);
+  const [activeId, setActiveId] = useState(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  return (
+    <DndContext 
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragMove={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext 
+        items={draggableItems}
+        strategy={verticalListSortingStrategy}
+      >
+        { 
+          draggableItems.map(item => {
+            const { id, title, isTodo, status, ...otherItemsProps } = item;
+            const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, isTodoFilter);
+            const icon = isTodo && getStatusIcon(status, iconMenuItem);
+            const isDraggingItem = activeId === id; 
+
+            return (
+              showItem && 
+                <SortableMenuItemWithButtons 
+                  title={title.toUpperCase()}
+                  onClick={() => {}}
+                  onEditButtonClick={() => handleClickOpenEditPopup(item)}
+                  onDeleteButtonClick={() => handleClickDeleteItem(id)}
+                  Icon={icon}
+                  Menu={ItemManagerItemMoreOptions}
+                  key={id}
+                  id={id}
+                  {...otherItemsProps}
+                  hidden={isDraggingItem}
+                />
+            )
+          })
+        }
+
+      </SortableContext>
+      <DragOverlay>
+        {activeId ? 
+          <MenuItemWithButtons 
+            id={activeId} 
+            title={draggingItem.title.toUpperCase()}
+            onClick={() => {}}
+            onEditButtonClick={() => handleClickOpenEditPopup(draggingItem)}
+            onDeleteButtonClick={() => handleClickDeleteItem(activeId)}
+            Icon={draggingItem.isTodo && getStatusIcon(draggingItem.status, iconMenuItem)}
+            Menu={ItemManagerItemMoreOptions} 
+            
+          /> 
+        : null}
+      </DragOverlay>
+    </DndContext>
+     
+  );
+
+  function handleDragStart(event) {
+    const {active} = event;
+      setActiveId(active.id);
+      const selectedItem = items.filter(obj => obj.id === active.id);
+      setDraggingItem(selectedItem[0]);
+
+    
   }
   
-  return (
-    <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable droppableId="items">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            { 
-              draggableItems.map((item, index) => {
-                const { id, title, categories, isTodo, status, ...otherItemsProps } = item;
-                const isCategoryFiltered = filteredCategories.length === 0 
-                  || (categories 
-                  && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-                const statusIsFiltered = (filteredStatus.length === 0 
-                  || filteredStatus.indexOf(status) !== -1
-                  );
-                const isTodoFiltered = statusIsFiltered 
-                && ((isTodo && isTodoFilter) 
-                || !isTodoFilter);
-                const isFiltered = isCategoryFiltered && isTodoFiltered;
-                const icon = isTodo && getStatusIcon(status, iconMenuItem);
-                if (isFiltered) filteredItemCount++;
-                return (
-                  isFiltered &&
-                  <Draggable  key={id}  draggableId={id} index={index}>
-                    {(provided) => (
-                      <div 
-                        ref={provided.innerRef} 
-                        {...provided.draggableProps} 
-                        {...provided.dragHandleProps}
-                      >
-                        <MenuItemWithButtons 
-                          title={title.toUpperCase()}
-                          onClick={() => handleClickOpenDetailPopup(item)}
-                          onEditButtonClick={() => handleClickOpenEditPopup(item)}
-                          onDeleteButtonClick={() => handleClickDeleteItem(id)}
-                          Icon={icon}
-                          Menu={ItemManagerItemMoreOptions}
-                          {...otherItemsProps}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                )
-              })
-            }
-            {
-              filteredItemCount === 0 && 
-              <div style={{height: '80px'}}> No categories with current filters </div>
-            }
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
-  );
+  function handleDragEnd(event) {
+    const {active, over} = event;
+    if (active.id !== over.id) {
+        let dragItems = draggableItems;
+        const destinationIndex = over.data.current.sortable.index;
+        const sourceIndex = active.data.current.sortable.index;
+        const nextItemIndex = dragItems.length > destinationIndex + 1 ? dragItems[destinationIndex + 1].index : destinationIndex - 1000;
+        const sourceItemIndex = dragItems[sourceIndex].index;
+        const newItemIndex = (sourceItemIndex + nextItemIndex) / 2;
+        const newItemArray = arrayMove(draggableItems, sourceIndex, destinationIndex);
+        setDraggableItems(newItemArray);
+        dispatch(setItems(newItemArray, active.id, newItemIndex)); 
+    }
+    setActiveId(null);
+  }
 };
 
 export default DirectoryList;

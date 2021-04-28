@@ -1,5 +1,4 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { forwardRef } from 'react';
 
 import {
   MenuItemContainer,
@@ -8,7 +7,7 @@ import {
   ButtonHolder
 } from './menu-item-with-buttons.styles';
 
-const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteButtonClick, Icon, Menu }) => {
+const MenuItemWithButtons = forwardRef(({ title, id, onClick, onEditButtonClick, onDeleteButtonClick, Icon, Menu, hidden, ...props }, ref) => {
 
   const handleEditButtonClick = e => {
     e.stopPropagation();
@@ -21,6 +20,9 @@ const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteBu
   return (
     <MenuItemContainer
       onClick={onClick}
+      ref={ref}
+      {...props}
+      hidden={hidden}
     >
       <ContentContainer>
       {Icon}
@@ -31,6 +33,6 @@ const MenuItemWithButtons = ({ title, id, onClick, onEditButtonClick, onDeleteBu
       </ButtonHolder>
     </MenuItemContainer>
   )
-}
+});
+export default MenuItemWithButtons;
 
-export default withRouter(MenuItemWithButtons);
