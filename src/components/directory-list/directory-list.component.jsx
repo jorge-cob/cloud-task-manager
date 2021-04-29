@@ -66,7 +66,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 10,
+        distance: 5,
       },
     }),
     useSensor(KeyboardSensor, {
@@ -74,18 +74,11 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     })
   );
 
-  function handleClick(item) {
-    if (!activeId) {
-      handleClickOpenDetailPopup(item);
-    }
-    setActiveId(null);
-  }
-
   return (
     <DndContext 
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragMove={handleDragStart}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
       <SortableContext 
@@ -103,7 +96,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
               showItem && 
                 <SortableMenuItemWithButtons 
                   title={title.toUpperCase()}
-                  onClick={() => handleClick(item)}
+                  onClick={() => handleClickOpenDetailPopup(item)}
                   onEditButtonClick={() => handleClickOpenEditPopup(item)}
                   onDeleteButtonClick={() => handleClickDeleteItem(id)}
                   Icon={icon}
@@ -128,7 +121,6 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             onDeleteButtonClick={() => {}}
             Icon={draggingItem.isTodo && getStatusIcon(draggingItem.status, iconMenuItem)}
             Menu={ItemManagerItemMoreOptions} 
-            
           /> 
         : null}
       </DragOverlay>
@@ -138,24 +130,37 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
 
   function handleDragStart(event) {
     const {active} = event;
-    setActiveId(active.id);
     const selectedItem = items.filter(obj => obj.id === active.id);
     setDraggingItem(selectedItem[0]);
+    setActiveId(active.id);
   }
   
   function handleDragEnd(event) {
     const {active, over} = event;
     if (active.id !== over.id) {
-        let dragItems = draggableItems;
         const destinationIndex = over.data.current.sortable.index;
+        const destinationItemIndex = draggableItems[destinationIndex].index;
         const sourceIndex = active.data.current.sortable.index;
-        const nextItemIndex = dragItems.length > destinationIndex + 1 ? dragItems[destinationIndex + 1].index : destinationIndex - 1000;
-        const sourceItemIndex = dragItems[sourceIndex].index;
-        const newItemIndex = (sourceItemIndex + nextItemIndex) / 2;
+        const goesUp = sourceIndex > destinationIndex;
+        let newItemIndex = 0;
+        if (goesUp) {
+          if (destinationIndex === 0) {
+            newItemIndex = draggableItems[destinationIndex].index + 100000000;
+          } else {
+            newItemIndex = (destinationItemIndex + draggableItems[destinationIndex - 1].index) / 2;
+          }
+        } else {
+          if (destinationIndex === draggableItems.length - 1) {
+            newItemIndex = draggableItems[destinationIndex].index - 100000000; 
+          } else {
+            newItemIndex = (destinationItemIndex + draggableItems[destinationIndex + 1].index) / 2;
+          }
+        }
         const newItemArray = arrayMove(draggableItems, sourceIndex, destinationIndex);
-        setDraggableItems(newItemArray);
+        newItemArray[destinationIndex].index = newItemIndex;
         dispatch(setItems(newItemArray, active.id, newItemIndex)); 
     }
+    setActiveId(null);
   }
 };
 

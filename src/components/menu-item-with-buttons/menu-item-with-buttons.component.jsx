@@ -17,9 +17,11 @@ const MenuItemWithButtons = forwardRef(({ title, id, onClick, onEditButtonClick,
   const handleDeleteItem = e => {
     onDeleteButtonClick();
   }
+
+
   return (
     <MenuItemContainer
-      onClick={onClick}
+      onClick={e => onClick(e)}
       ref={ref}
       {...props}
       hidden={hidden}

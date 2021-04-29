@@ -44,9 +44,9 @@ export function* addNewItem(action) {
   const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
   let computedIndex = index;
   if (!index && itemsWithCategoriesMap.length === 0) {
-    computedIndex = 1000;
+    computedIndex = 1000000000;
   } else if (!index) {
-    computedIndex = itemsWithCategoriesMap[0].index + 1000;
+    computedIndex = itemsWithCategoriesMap[0].index + 100000000;
   }
 
   const itemData = {

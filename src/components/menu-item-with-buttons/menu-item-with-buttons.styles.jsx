@@ -10,7 +10,6 @@ export const MenuItemContainer = styled.div`
   justify-content: space-between;
   border: 1px solid black;
   margin: 15px 0;
-  overflow: hidden;
   visibility: ${({ hidden }) => (hidden ? 'hidden' : 'visible')};
  
 `;
