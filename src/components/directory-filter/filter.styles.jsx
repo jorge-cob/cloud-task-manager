@@ -38,6 +38,8 @@ export const FilteredCategoryChip = styled.div`
   padding: 0px 10px 0px 10px;
   border: 1px solid transparent;
   border-radius: 14px;
+  font-size: 14px;
+
   &:hover {
     cursor: pointer;
     border: 1px solid black;	
@@ -51,15 +53,17 @@ export const TodoMenuContainer = styled.div`
 `;
 
 export const TodoChip = styled.div`
-  width: 100px;
-  min-width: 100px;
-  height: 24px;
+  width: 80px;
+  min-width: 80px;
+  height: 22px;
+  font-size: 14px;
   text-transform: capitalize;
   background-color: #d3d3d3;
   text-align: center;
   margin-top: 5px;
   margin-left: 5px;
   background-color: ${({ isFiltering }) => (isFiltering ? '#33ab23' : '#a3b3d4')};
+  border-radius: 12px;
 
 `;
 
