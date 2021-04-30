@@ -20,8 +20,7 @@ export const itemIsBeingShown = (item, filteredCategories, filteredStatus, isTod
   const isCategoryFiltered = filteredCategories.length === 0 
     || (categories 
     && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-  const statusIsFiltered = ( !isTodoFilter ||
-    filteredStatus.length === 0 || (isTodoFilter && filteredStatus.indexOf(status) !== -1)
-  );
+  const statusIsFiltered = !isTodoFilter || (isTodoFilter && isTodo && filteredStatus.indexOf(status) !== -1) || (isTodoFilter && isTodo && filteredStatus.length === 0) 
+
   return isCategoryFiltered && statusIsFiltered;
 };
