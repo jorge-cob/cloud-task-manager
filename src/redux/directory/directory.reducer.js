@@ -7,8 +7,8 @@ const INITIAL_STATE = {
   isFetching: false,
   errorMessage: undefined,
   filteredCategories: [],
-  statusFilter: [],
-  isTodoFilter: false,
+  statusFilter: ['pending', 'done', 'discarded'],
+  isTodoFilter: true,
 };
 
 const directoryReducer = (state = INITIAL_STATE, action) => {

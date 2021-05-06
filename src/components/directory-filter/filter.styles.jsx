@@ -49,7 +49,7 @@ export const FilteredCategoryChip = styled.div`
 export const TodoMenuContainer = styled.div`
   position: absolute;
   left: 80%;
-  top: 195px;
+  top: 170px;
 `;
 
 export const TodoChip = styled.div`
