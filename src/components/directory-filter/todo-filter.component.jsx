@@ -3,10 +3,12 @@ import { useDispatch } from 'react-redux';
 
 import { addStatusFilter, removeStatusFilter, setFilterType } from '../../redux/directory/directory.actions';
 
-import { TodoChip, TodoMenuContainer, TodoStatusContainer } from './filter.styles';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+
+import { TodoMenuContainer, TodoStatusContainer } from './filter.styles';
 
 const TodoFilter = (props) => {
   const { filteredStatus, filterType } = props;
@@ -21,43 +23,43 @@ const TodoFilter = (props) => {
     }
   };
 
-  const handleChangeFilterType = e => {
-    dispatch(setFilterType(e.target.value));
+  const handleChangeFilterType =  (event, newFilterType) => {
+    dispatch(setFilterType(newFilterType));
   }
 
   return (
       <TodoMenuContainer>
-      <RadioGroup aria-label="gender" name="gender1" value={filterType} onChange={handleChangeFilterType}>
-        <FormControlLabel value="all" control={<Radio />} label="All" />
-        <FormControlLabel value="regular" control={<Radio />} label="Regular" />
-        <FormControlLabel value="todo" control={<Radio />} label="To do" />
-      </RadioGroup>
-            { filterType === 'todo' && (
-              <TodoStatusContainer>
-                  <TodoChip 
-                    key='Pending'
-                    onClick={() => handleToggleStatus('pending')}
-                    isFiltering={filteredStatus.includes('pending')}
-                  >
-                    Pending
-                  </TodoChip>
-                  <TodoChip 
-                    key='Done'
-                    onClick={() => handleToggleStatus('done')}
-                    isFiltering={filteredStatus.includes('done')}
-                  >
-                    Done
-                  </TodoChip>
-                  <TodoChip 
-                    key='Discarded'
-                    onClick={() => handleToggleStatus('discarded')}
-                    isFiltering={filteredStatus.includes('discarded')}
-                  >
-                    Discarded
-                  </TodoChip>
-              
-              </TodoStatusContainer>     
-            )}
+        <ToggleButtonGroup
+          value={filterType}
+          exclusive
+          onChange={handleChangeFilterType}
+        >
+          <ToggleButton value="all">
+            All
+          </ToggleButton>
+          <ToggleButton value="regular">
+            Regular
+          </ToggleButton>
+          <ToggleButton value="todo">
+            To do
+          </ToggleButton>
+        </ToggleButtonGroup>
+        { filterType === 'todo' && (
+          <TodoStatusContainer>
+            <FormControlLabel
+              control={<Switch checked={filteredStatus.includes('pending')} onChange={() => handleToggleStatus('pending')} name="pending" />}
+              label="Pending"
+            />
+            <FormControlLabel
+              control={<Switch checked={filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
+              label="Done"
+            />
+            <FormControlLabel
+              control={<Switch checked={filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
+              label="Discarded"
+            />
+          </TodoStatusContainer>     
+        )}
       </TodoMenuContainer>
   );
 };

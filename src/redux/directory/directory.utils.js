@@ -22,7 +22,7 @@ export const itemIsBeingShown = (item, filteredCategories, filteredStatus, filte
     && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
 
   const typeFilter = filterType === 'all' || (filterType === 'todo' && isTodo) || (filterType === 'regular' && !isTodo);
-  const statusIsFiltered = isTodo && filteredStatus.indexOf(status) !== -1 || !isTodo
+  const statusIsFiltered = filterType !== 'todo' || ( isTodo && filteredStatus.indexOf(status) !== -1 ) || !isTodo
 
   return isCategoryFiltered && typeFilter && statusIsFiltered;
 };
