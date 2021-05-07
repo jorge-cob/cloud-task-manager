@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   errorMessage: undefined,
   filteredCategories: [],
   statusFilter: ['pending', 'done', 'discarded'],
-  isTodoFilter: true,
+  filterType: ['all']
 };
 
 const directoryReducer = (state = INITIAL_STATE, action) => {
@@ -50,10 +50,10 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         filteredCategories: state.filteredCategories.filter(status => status !== action.payload)
       }
-    case DirectoryActionTypes.TOGGLE_TODO_FILTER:
+    case DirectoryActionTypes.CHANGE_FILTER_TYPE:
       return {
         ...state,
-        isTodoFilter: !state.isTodoFilter
+        filterType: action.payload
       }
     case DirectoryActionTypes.ADD_STATUS_FILTER:
       return {

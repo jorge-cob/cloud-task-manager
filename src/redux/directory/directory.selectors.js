@@ -18,9 +18,9 @@ export const selectDirectoryFilteredStatus = createSelector(
   directory => directory.statusFilter
 );
 
-export const selectDirectoryIsTodoFiltered = createSelector(
+export const selectDirectoryFilterType = createSelector(
   [selectDirectory],
-  directory => directory.isTodoFilter
+  directory => directory.filterType
 );
 
 export const selectItemDetails = memoize((itemId) => 

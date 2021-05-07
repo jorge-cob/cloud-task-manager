@@ -1,13 +1,15 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { addStatusFilter, removeStatusFilter, toggleTodoFilter } from '../../redux/directory/directory.actions';
+import { addStatusFilter, removeStatusFilter, setFilterType } from '../../redux/directory/directory.actions';
 
 import { TodoChip, TodoMenuContainer, TodoStatusContainer } from './filter.styles';
-
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const TodoFilter = (props) => {
-  const { filteredStatus, isTodo } = props;
+  const { filteredStatus, filterType } = props;
   const dispatch = useDispatch();
 
 
@@ -19,19 +21,18 @@ const TodoFilter = (props) => {
     }
   };
 
-  const handleToggleIsTodo = () => {
-    dispatch(toggleTodoFilter());
-  };
+  const handleChangeFilterType = e => {
+    dispatch(setFilterType(e.target.value));
+  }
+
   return (
       <TodoMenuContainer>
-            <TodoChip 
-              key='isTodo'
-              onClick={handleToggleIsTodo}
-              isFiltering={isTodo}
-            >
-             Is To Do
-            </TodoChip>
-            { isTodo && (
+      <RadioGroup aria-label="gender" name="gender1" value={filterType} onChange={handleChangeFilterType}>
+        <FormControlLabel value="all" control={<Radio />} label="All" />
+        <FormControlLabel value="regular" control={<Radio />} label="Regular" />
+        <FormControlLabel value="todo" control={<Radio />} label="To do" />
+      </RadioGroup>
+            { filterType === 'todo' && (
               <TodoStatusContainer>
                   <TodoChip 
                     key='Pending'

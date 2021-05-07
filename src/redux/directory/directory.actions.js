@@ -42,10 +42,6 @@ export const removeCategoryFromFilter = categoryId => ({
   payload: categoryId
 });
 
-export const toggleTodoFilter = () => ({
-  type: DirectoryActionTypes.TOGGLE_TODO_FILTER,
-});
-
 export const addStatusFilter = statusId => ({
   type: DirectoryActionTypes.ADD_STATUS_FILTER,
   payload: statusId
@@ -60,3 +56,8 @@ export const setItems = (items, itemToChangeIndex, newIndex) => ({
   type: DirectoryActionTypes.SET_ITEMS,
   payload: {items, itemToChangeIndex, newIndex}
 });
+
+export const setFilterType = type => ({
+  type: DirectoryActionTypes.CHANGE_FILTER_TYPE,
+  payload: type
+})

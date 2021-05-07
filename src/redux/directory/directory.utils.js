@@ -15,12 +15,14 @@ export const addItem = (directoryItems, payload) => {
 
 export const removeItem = (directoryItems, payload) => directoryItems.filter(item => item.id !== payload);
 
-export const itemIsBeingShown = (item, filteredCategories, filteredStatus, isTodoFilter) => {
+export const itemIsBeingShown = (item, filteredCategories, filteredStatus, filterType) => {
   const { categories, isTodo, status } = item;
   const isCategoryFiltered = filteredCategories.length === 0 
     || (categories 
     && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
-  const statusIsFiltered = (isTodoFilter && (isTodo && filteredStatus.indexOf(status) !== -1 || !isTodo)) || (!isTodoFilter && !isTodo)
 
-  return isCategoryFiltered && statusIsFiltered;
+  const typeFilter = filterType === 'all' || (filterType === 'todo' && isTodo) || (filterType === 'regular' && !isTodo);
+  const statusIsFiltered = isTodo && filteredStatus.indexOf(status) !== -1 || !isTodo
+
+  return isCategoryFiltered && typeFilter && statusIsFiltered;
 };

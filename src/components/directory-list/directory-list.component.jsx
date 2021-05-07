@@ -30,7 +30,7 @@ import {
   selectDirectoryFilteredCategories, 
   selectDirectoryFilteredStatus, 
   selectDirectoryItems, 
-  selectDirectoryIsTodoFiltered 
+  selectDirectoryFilterType
 } from '../../redux/directory/directory.selectors';
 import { setItems } from '../../redux/directory/directory.actions';
 import { itemIsBeingShown } from '../../redux/directory/directory.utils';
@@ -46,10 +46,10 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   const { iconMenuItem } = useStyles();
   const dispatch = useDispatch();
 
-  const {items, filteredCategories, isTodoFilter, filteredStatus} = useSelector(createStructuredSelector({
+  const {items, filteredCategories, filterType, filteredStatus} = useSelector(createStructuredSelector({
     items: selectDirectoryItems,
     filteredCategories: selectDirectoryFilteredCategories,
-    isTodoFilter: selectDirectoryIsTodoFiltered,
+    filterType: selectDirectoryFilterType,
     filteredStatus: selectDirectoryFilteredStatus
   }));
   
@@ -88,7 +88,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         { 
           draggableItems.map(item => {
             const { id, title, isTodo, status, ...otherItemsProps } = item;
-            const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, isTodoFilter);
+            const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
             const icon = isTodo && getStatusIcon(status, iconMenuItem);
             const isDraggingItem = activeId === id; 
 
