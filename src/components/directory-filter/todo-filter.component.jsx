@@ -14,7 +14,6 @@ const TodoFilter = (props) => {
   const { filteredStatus, filterType } = props;
   const dispatch = useDispatch();
 
-
   const handleToggleStatus = statusId => {
     if (!filteredStatus.includes(statusId)) {
       dispatch(addStatusFilter(statusId));
@@ -24,7 +23,9 @@ const TodoFilter = (props) => {
   };
 
   const handleChangeFilterType =  (event, newFilterType) => {
-    dispatch(setFilterType(newFilterType));
+    const newType = newFilterType ? newFilterType : 'all';
+
+    dispatch(setFilterType(newType));
   }
 
   return (
