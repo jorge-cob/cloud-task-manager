@@ -33,6 +33,7 @@ const TodoFilter = (props) => {
           value={filterType}
           exclusive
           onChange={handleChangeFilterType}
+          size="small"
         >
           <ToggleButton value="all">
             All
