@@ -32,7 +32,9 @@ import {
   selectDirectoryItems, 
   selectDirectoryFilterType
 } from '../../redux/directory/directory.selectors';
+
 import { setItems } from '../../redux/directory/directory.actions';
+
 import { itemIsBeingShown } from '../../redux/directory/directory.utils';
 
 const useStyles = makeStyles({

@@ -24,7 +24,6 @@ const TodoFilter = (props) => {
 
   const handleChangeFilterType =  (event, newFilterType) => {
     const newType = newFilterType ? newFilterType : 'all';
-
     dispatch(setFilterType(newType));
   }
 
@@ -48,15 +47,15 @@ const TodoFilter = (props) => {
         { filterType === 'todo' && (
           <TodoStatusContainer>
             <FormControlLabel
-              control={<Switch checked={filteredStatus.includes('pending')} onChange={() => handleToggleStatus('pending')} name="pending" />}
+              control={<Switch size="small" checked={filteredStatus.includes('pending')} onChange={() => handleToggleStatus('pending')} name="pending" />}
               label="Pending"
             />
             <FormControlLabel
-              control={<Switch checked={filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
+              control={<Switch size="small" checked={filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
               label="Done"
             />
             <FormControlLabel
-              control={<Switch checked={filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
+              control={<Switch size="small" checked={filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
               label="Discarded"
             />
           </TodoStatusContainer>     
