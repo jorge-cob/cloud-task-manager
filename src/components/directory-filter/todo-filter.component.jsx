@@ -15,7 +15,7 @@ const TodoFilter = (props) => {
   const dispatch = useDispatch();
 
   const handleToggleStatus = statusId => {
-    if (!filteredStatus.includes(statusId)) {
+    if (filteredStatus && !filteredStatus.includes(statusId)) {
       dispatch(addStatusFilter(statusId));
     } else {
       dispatch(removeStatusFilter(statusId));
@@ -48,15 +48,15 @@ const TodoFilter = (props) => {
         { filterType === 'todo' && (
           <TodoStatusContainer>
             <FormControlLabel
-              control={<Switch size="small" checked={filteredStatus.includes('pending')} onChange={() => handleToggleStatus('pending')} name="pending" />}
+              control={<Switch size="small" checked={filteredStatus && filteredStatus.includes('pending')} onChange={() => handleToggleStatus('pending')} name="pending" />}
               label="Pending"
             />
             <FormControlLabel
-              control={<Switch size="small" checked={filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
+              control={<Switch size="small" checked={filteredStatus && filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
               label="Done"
             />
             <FormControlLabel
-              control={<Switch size="small" checked={filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
+              control={<Switch size="small" checked={filteredStatus && filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
               label="Discarded"
             />
           </TodoStatusContainer>     

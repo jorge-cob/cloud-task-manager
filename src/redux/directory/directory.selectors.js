@@ -15,7 +15,7 @@ export const selectDirectoryFilteredCategories = createSelector(
 
 export const selectDirectoryFilteredStatus = createSelector(
   [selectDirectory],
-  directory => directory.statusFilter
+  directory => directory.statusFilter 
 );
 
 export const selectDirectoryFilterType = createSelector(

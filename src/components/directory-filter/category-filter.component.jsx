@@ -20,7 +20,7 @@ const CategoryFilter = (props) => {
       <CategoryMenuContainer>
       {
         categories && categories.map(category => {
-          if (!filteredCategories.includes(category.id)) {
+          if (filteredCategories && !filteredCategories.includes(category.id)) {
             return (
               <CategoryChip 
                 key={category.id} 

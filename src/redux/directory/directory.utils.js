@@ -17,9 +17,9 @@ export const removeItem = (directoryItems, payload) => directoryItems.filter(ite
 
 export const itemIsBeingShown = (item, filteredCategories, filteredStatus, filterType) => {
   const { categories, isTodo, status } = item;
-  const isCategoryFiltered = filteredCategories.length === 0 
+  const isCategoryFiltered = !filteredCategories || filteredCategories.length === 0 
     || (categories 
-    && categories.some(categoryId=> filteredCategories.indexOf(categoryId) !== -1) );
+    && categories.some(categoryId=> filteredCategories && filteredCategories.indexOf(categoryId) !== -1) );
 
   const typeFilter = filterType === 'all' || (filterType === 'todo' && isTodo) || (filterType === 'regular' && !isTodo);
   const statusIsFiltered = filterType !== 'todo' || ( isTodo && filteredStatus.indexOf(status) !== -1 ) || !isTodo
