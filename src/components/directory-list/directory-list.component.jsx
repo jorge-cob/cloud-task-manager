@@ -76,6 +76,10 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     })
   );
 
+  function addSomeRandomeness() {
+    return + Math.random() * (1000000 - 0) + 1;
+  }
+
   return (
     <DndContext 
       sensors={sensors}
@@ -147,15 +151,15 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         let newItemIndex = 0;
         if (goesUp) {
           if (destinationIndex === 0) {
-            newItemIndex = draggableItems[destinationIndex].index + 100000000;
+            newItemIndex = draggableItems[destinationIndex].index + 100000000 + addSomeRandomeness();
           } else {
-            newItemIndex = (destinationItemIndex + draggableItems[destinationIndex - 1].index) / 2;
+            newItemIndex = ((destinationItemIndex + draggableItems[destinationIndex - 1].index) / 2) + addSomeRandomeness();
           }
         } else {
           if (destinationIndex === draggableItems.length - 1) {
-            newItemIndex = draggableItems[destinationIndex].index - 100000000; 
+            newItemIndex = draggableItems[destinationIndex].index - 100000000 - addSomeRandomeness();
           } else {
-            newItemIndex = (destinationItemIndex + draggableItems[destinationIndex + 1].index) / 2;
+            newItemIndex = ((destinationItemIndex + draggableItems[destinationIndex + 1].index) / 2) + addSomeRandomeness();
           }
         }
         const newItemArray = arrayMove(draggableItems, sourceIndex, destinationIndex);
