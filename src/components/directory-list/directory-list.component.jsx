@@ -93,7 +93,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
       >
         { 
           draggableItems.map(item => {
-            const { id, title, isTodo, status, ...otherItemsProps } = item;
+            const { id, title, isTodo, status, color, ...otherItemsProps } = item;
             const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
             const icon = isTodo && getStatusIcon(status, iconMenuItem);
             const isDraggingItem = activeId === id; 
@@ -105,6 +105,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
                   onClick={() => handleClickOpenDetailPopup(item)}
                   onEditButtonClick={() => handleClickOpenEditPopup(item)}
                   onDeleteButtonClick={() => handleClickDeleteItem(id)}
+                  backgroundColor={color}
                   Icon={icon}
                   Menu={ItemManagerItemMoreOptions}
                   key={id}

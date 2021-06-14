@@ -13,6 +13,9 @@ import { selectCategoryItems } from '../../redux/category/category.selectors';
 import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
 
+import { HexColorPicker } from 'react-colorful';
+import './color-picker.styles.css';
+
 
 const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const {categories} = useSelector(createStructuredSelector({
@@ -24,13 +27,14 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ status, setStatus ] = useState('pending');
   const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = useState('');
+  const [color, setColor] = useState('#f2f0eb');
 
   const onSubmit = () => {
     if (!title) {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status);
+      handleSubmit(category, title, description, isTodo, status, color);
     }
 
   };
@@ -95,7 +99,9 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
         <Button onClick={onOpenCategoryPopup} color="primary">
           + Add Category
         </Button>
-      
+        <section className='custom-color-picker'>
+          <HexColorPicker color={color} onChange={setColor} />
+        </section>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

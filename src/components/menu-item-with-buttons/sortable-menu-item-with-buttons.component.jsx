@@ -16,6 +16,7 @@ const SortableMenuItemWithButtons = (props) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    backgroundColor: props.backgroundColor
   };
   return (
     <MenuItemWithButtons ref={setNodeRef} style={style} {...attributes} {...listeners} {...props} />

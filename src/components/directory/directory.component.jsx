@@ -76,9 +76,9 @@ const Directory = () => {
     dispatch(removeItem(id));
   };
 
-  const handleEditItem = (categoryId, title, description, isTodo, status, index) => {
+  const handleEditItem = (categoryId, title, description, isTodo, status, color, index) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status, index));
+    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status, color, index));
   };
   
   return (

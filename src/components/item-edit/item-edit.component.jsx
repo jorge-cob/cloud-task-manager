@@ -13,7 +13,8 @@ import { selectCategoryItems } from '../../redux/category/category.selectors';
 import CategoryPopup from '../category-popup/category-popup.component';
 import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
-
+import { HexColorPicker } from 'react-colorful';
+import './color-picker.styles.css';
 
 const ItemEdit = ({ handleSubmit, handleClose }) => {
 
@@ -26,7 +27,8 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
   const [ isTodo, setIsTodo ] = useState(item.isTodo);
   const [ status, setStatus ] = useState(item.status);
   const [ category, setCategory] = useState(categories);
-  const [titleErrorText, setTitleErrorText] = React.useState("");
+  const [titleErrorText, setTitleErrorText] = React.useState('');
+  const [color, setColor] = useState(item?.color || '#f2f0eb');
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, item.index);
+      handleSubmit(category, title, description, isTodo, status, color, item.index);
     }
 
   };
@@ -121,7 +123,9 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
           open={isCategoryPopupOpen}
           handleClose={handleCloseCategoryPopup}
         />
-    
+        <section className='custom-color-picker'>
+          <HexColorPicker color={color} onChange={setColor} />
+        </section>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
