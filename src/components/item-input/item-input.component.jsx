@@ -23,7 +23,7 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ isTodo, setIsTodo ] = useState(false);
   const [ status, setStatus ] = useState('pending');
   const [ category, setCategory] = useState([]);
-  const [titleErrorText, setTitleErrorText] = React.useState("");
+  const [titleErrorText, setTitleErrorText] = useState('');
 
   const onSubmit = () => {
     if (!title) {
@@ -83,7 +83,6 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
           options={{ 
             pending: 'Pending',
             done: 'Done',
-            discarded: 'Discarded'
           }}
         />
 

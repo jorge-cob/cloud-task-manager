@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   isFetching: false,
   errorMessage: undefined,
   filteredCategories: [],
-  statusFilter: ['pending', 'done', 'discarded'],
+  statusFilter: ['pending', 'done'],
   filterType: ['all']
 };
 

@@ -105,7 +105,6 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
           options={{ 
             pending: 'Pending',
             done: 'Done',
-            discarded: 'Discarded'
           }}
         />
 

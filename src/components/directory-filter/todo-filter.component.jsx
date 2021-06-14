@@ -55,10 +55,6 @@ const TodoFilter = (props) => {
               control={<Switch size="small" checked={filteredStatus && filteredStatus.includes('done')} onChange={() => handleToggleStatus('done')} name="done" />}
               label="Done"
             />
-            <FormControlLabel
-              control={<Switch size="small" checked={filteredStatus && filteredStatus.includes('discarded')} onChange={() => handleToggleStatus('discarded')} name="discarded" />}
-              label="Discarded"
-            />
           </TodoStatusContainer>     
         )}
       </TodoMenuContainer>
