@@ -18,6 +18,7 @@ import DetailPopup from '../detail-popup/detail-popup.component';
 
 import { getStatusIcon } from './directory.helpers';
 import DirectoryFilter from '../directory-filter/directory-filter.component';
+import CategoryEditPopup from '../category-popup/category-edit-popup.component';
 
 const useStyles = makeStyles({
   iconMenuItem: {
@@ -34,6 +35,8 @@ const Directory = () => {
   const [isDetailPopupOpen, setIsDetailPopupOpen] = useState(false);
   const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
+  const [isCategoryEditPopupOpen, setIsCategoryEditOpenPopup] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState({});
   const [selectedItem, setSelectedItem] = useState();
   const [selectedIcon, setSelectedIcon] = useState();
 
@@ -42,8 +45,18 @@ const Directory = () => {
     setIsCategoryOpenPopup(true);
   }
 
+  const handleClickOpenCategoryEditPopup = category => {
+    setSelectedCategory(category);
+    setIsCategoryEditOpenPopup(true);
+  }
+
   const handleCloseCategoryPopup = () => {
     setIsCategoryOpenPopup(false);
+  };
+
+  const handleCloseCategoryEditPopup = () => {
+    setIsCategoryEditOpenPopup(false);
+    setSelectedCategory({});
   };
   
   const handleClickOpenDetailPopup = item => {
@@ -83,7 +96,7 @@ const Directory = () => {
   
   return (
     <DirectoryContainer>
-      <DirectoryFilter />
+      <DirectoryFilter handleEditCategory={handleClickOpenCategoryEditPopup} />
       <DirectoryMenuContainer>
         <DirectoryList 
           handleClickOpenDetailPopup={handleClickOpenDetailPopup} 
@@ -104,6 +117,11 @@ const Directory = () => {
         <CategoryPopup 
           open={isCategoryPopupOpen}
           handleClose={handleCloseCategoryPopup}
+        />
+        <CategoryEditPopup
+          open={isCategoryEditPopupOpen}
+          handleClose={handleCloseCategoryEditPopup}
+          selectedCategory={selectedCategory.id}
         />
       </DirectoryMenuContainer>
         <div style={{display: 'flex'}}>

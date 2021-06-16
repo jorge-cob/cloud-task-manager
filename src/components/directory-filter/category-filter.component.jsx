@@ -8,15 +8,16 @@ import { CategoryChip, CategoryMenuContainer, IconEditItem } from './filter.styl
 
 
 const CategoryFilter = (props) => {
-  const { filteredCategories, categories } = props;
+  const { filteredCategories, categories, handleEditCategory } = props;
   const dispatch = useDispatch();
 
   const handleFilteredCategories = categoryId => {
     dispatch(addNewCategoryToFilter(categoryId));
   }
 
-  const handleEditClick = e => {
+  const handleEditClick = (e, category) => {
     e.stopPropagation(); 
+    handleEditCategory(category);
   }
   return (
   
@@ -33,7 +34,7 @@ const CategoryFilter = (props) => {
                 <span style={{paddingRight: '15px', color: category?.textColor}}>
                   { category.title.length > 10 ? `${category.title.substring(0,10)}...` : category.title  } 
                 </span>
-                <IconEditItem onClick={handleEditClick} fill={category?.textColor} />
+                <IconEditItem onClick={e => handleEditClick(e, category)} fill={category?.textColor} />
               </CategoryChip>
             )
           }

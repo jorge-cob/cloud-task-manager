@@ -10,7 +10,8 @@ import { selectDirectoryFilteredCategories, selectDirectoryFilteredStatus, selec
 import FilteredFilter from './filtered-filter.component';
 import { FilterContainer, CategoryFilterContainer, TodoFilterContainer } from './filter.styles';
 
-const DirectoryFilter = () => {
+const DirectoryFilter = props => {
+  const { handleEditCategory } = props;
   const {filteredCategories, filteredStatus, categories, filterType} = useSelector(createStructuredSelector({
     filteredCategories: selectDirectoryFilteredCategories,
     filteredStatus: selectDirectoryFilteredStatus,
@@ -20,8 +21,8 @@ const DirectoryFilter = () => {
   return (
     <FilterContainer>
       <CategoryFilterContainer>
-        <FilteredFilter filteredCategories={filteredCategories} categories={categories} />
-        <CategoryFilter filteredCategories={filteredCategories} categories={categories} />
+        <FilteredFilter filteredCategories={filteredCategories} categories={categories} handleEditCategory={handleEditCategory} />
+        <CategoryFilter filteredCategories={filteredCategories} categories={categories} handleEditCategory={handleEditCategory} />
       </CategoryFilterContainer>
       <TodoFilterContainer>
         <TodoFilter filteredStatus={filteredStatus} filterType={filterType} />
