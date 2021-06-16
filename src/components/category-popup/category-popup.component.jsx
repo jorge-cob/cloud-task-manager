@@ -9,12 +9,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import Popup1 from '../popup/popup.component';
 import { addNewCategory } from '../../redux/category/category.actions';
-
+import { HexColorPicker } from 'react-colorful';
+import './color-picker.styles.css';
 
 const CategoryPopup = ({ open, handleClose }) => {
 
   const [ title, setTitle] = useState('');
   const [ description, setDescription ] = useState('');
+  const [color, setColor] = useState('#f2f0eb');
   const [titleErrorText, setTitleErrorText] = React.useState('');
 
   const dispatch = useDispatch();
@@ -24,11 +26,12 @@ const CategoryPopup = ({ open, handleClose }) => {
       setTitleErrorText('Please enter title');
     } else {
       const newItemId = uuidv4();
-      dispatch(addNewCategory(newItemId, title, description));
+      dispatch(addNewCategory(newItemId, title, description, color));
       setTitleErrorText('');
       setTitle('');
       setDescription('');
       handleClose();
+      setColor('');
     }
   };
   
@@ -58,6 +61,9 @@ const CategoryPopup = ({ open, handleClose }) => {
             value={description}
             onChange={e => setDescription(e.target.value)}
           />
+          <section className='custom-color-picker'>
+            <HexColorPicker color={color} onChange={setColor} />
+          </section>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

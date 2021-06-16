@@ -116,12 +116,14 @@ export const convertCategoriesSnapshotToMap = (categories) => {
   const transformedCategory = categories.docs.map(doc => {
     const {
       title,
-      description
+      description,
+      color
     } = doc.data();
     return {
       id: doc.id,
       title,
       description,
+      color
     }
   });
   return transformedCategory;

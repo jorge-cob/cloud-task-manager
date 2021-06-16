@@ -3,12 +3,13 @@ import CategoryActionTypes from './category.types';
 import { firestore } from '../../firebase/firebase.utils';
 
 
-export const addNewCategory = (newItemId, title, description) => ({
+export const addNewCategory = (newItemId, title, description, color) => ({
   type: CategoryActionTypes.ADD_CATEGORY,
   payload: {
     newItemId,
     title,
     description,
+    color
   }
 });
 
