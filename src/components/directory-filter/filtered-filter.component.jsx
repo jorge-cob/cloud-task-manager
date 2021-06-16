@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { removeCategoryFromFilter } from '../../redux/directory/directory.actions';
 
-import { FilteredCategoryChip, CategoryMenuContainer, IconCloseItem } from './filter.styles';
+import { FilteredCategoryChip, CategoryMenuContainer, IconCloseItem, IconEditItem } from './filter.styles';
 
 
 
@@ -15,6 +15,10 @@ const FilteredFilter = (props) => {
     dispatch(removeCategoryFromFilter(categoryId));
   };
 
+  const handleEditClick = e => {
+    e.stopPropagation();
+    
+  }
   return (
       <CategoryMenuContainer>
       {
@@ -24,11 +28,13 @@ const FilteredFilter = (props) => {
               <FilteredCategoryChip 
                 key={category.id} 
                 onClick={() => handleFilteredCategories(category.id)}
+                backgroundColor={category?.color}
               >
-                <IconCloseItem />
-                <span style={{paddingRight: '15px'}}>
+                <IconCloseItem fill={category?.textColor} />
+                <span style={{paddingRight: '15px', color: category?.textColor}}>
                   { category.title.length > 10 ? `${category.title.substring(0,10)}...` : category.title  } 
                 </span>
+                <IconEditItem onClick={handleEditClick} fill={category?.textColor} />
               </FilteredCategoryChip>
             )
           }

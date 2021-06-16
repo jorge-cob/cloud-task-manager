@@ -11,12 +11,16 @@ import Popup1 from '../popup/popup.component';
 import { addNewCategory } from '../../redux/category/category.actions';
 import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
+import ColorPickerToggle from '../color-picker-toggle/color-picker-toggle.component';
+
+
 
 const CategoryPopup = ({ open, handleClose }) => {
 
-  const [ title, setTitle] = useState('');
-  const [ description, setDescription ] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [color, setColor] = useState('#f2f0eb');
+  const [textColor, setTextColor] = useState('#000000');
   const [titleErrorText, setTitleErrorText] = React.useState('');
 
   const dispatch = useDispatch();
@@ -26,53 +30,60 @@ const CategoryPopup = ({ open, handleClose }) => {
       setTitleErrorText('Please enter title');
     } else {
       const newItemId = uuidv4();
-      dispatch(addNewCategory(newItemId, title, description, color));
+      dispatch(addNewCategory(newItemId, title, description, color, textColor));
       setTitleErrorText('');
       setTitle('');
       setDescription('');
       handleClose();
       setColor('');
+      setTextColor('#000000');
     }
   };
   
   return (
-    <Popup1 open={open} handleClose={handleClose} label='New Category'>
-    <form  noValidate>
-      <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Name"
-            type="text"
-            fullWidth
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            error={!!titleErrorText}
-            helperText={titleErrorText}
-          />
-          <TextField
-            margin="dense"
-            id="name"
-            label="Description"
-            type="text"
-            rows={3}
-            fullWidth
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-          />
-          <section className='custom-color-picker'>
-            <HexColorPicker color={color} onChange={setColor} />
-          </section>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={onSubmit} color="primary">
-          Submit
-        </Button>
-      </DialogActions>
+    <Popup1 open={open} handleClose={handleClose} label='New Category' textColor={textColor} backgroundColor={color}>
+      <form  noValidate>
+        <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Name"
+              type="text"
+              fullWidth
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              error={!!titleErrorText}
+              helperText={titleErrorText}
+            />
+            <TextField
+              margin="dense"
+              id="name"
+              label="Description"
+              type="text"
+              rows={3}
+              fullWidth
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+            />
+            <ColorPickerToggle 
+              selectedColor={textColor}
+              handleChange={col => setTextColor(col)}
+              label='Text Color'
+              colors={['#f2f0eb', '#000000', 'red', 'yellow']}
+            />
+            <section className='custom-color-picker'>
+              <HexColorPicker color={color} onChange={setColor} />
+            </section>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={onSubmit} color="primary">
+            Submit
+          </Button>
+        </DialogActions>
       </form>
     </Popup1>
   );

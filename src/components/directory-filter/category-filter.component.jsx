@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import { addNewCategoryToFilter } from '../../redux/directory/directory.actions';
 
-import { CategoryChip, CategoryMenuContainer } from './filter.styles';
+import { CategoryChip, CategoryMenuContainer, IconEditItem } from './filter.styles';
 
 
 
@@ -15,6 +15,9 @@ const CategoryFilter = (props) => {
     dispatch(addNewCategoryToFilter(categoryId));
   }
 
+  const handleEditClick = e => {
+    e.stopPropagation(); 
+  }
   return (
   
       <CategoryMenuContainer>
@@ -25,8 +28,12 @@ const CategoryFilter = (props) => {
               <CategoryChip 
                 key={category.id} 
                 onClick={() => handleFilteredCategories(category.id)}
+                style={{backgroundColor: category?.color, color: category?.textColor}}
               >
-                { category.title.length > 10 ? `${category.title.substring(0,10)}...` : category.title  } 
+                <span style={{paddingRight: '15px', color: category?.textColor}}>
+                  { category.title.length > 10 ? `${category.title.substring(0,10)}...` : category.title  } 
+                </span>
+                <IconEditItem onClick={handleEditClick} fill={category?.textColor} />
               </CategoryChip>
             )
           }

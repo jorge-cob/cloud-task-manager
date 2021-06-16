@@ -31,13 +31,14 @@ export function* fetchCategoriesStart() {
 
 export function* addNewCategory(action) {
   const userAuth = yield getCurrentUser();
-  const { newItemId, title, description, color } = action.payload;
+  const { newItemId, title, description, color, textColor } = action.payload;
   const userId = userAuth.uid;
   const itemData = {
     id: newItemId,
     title,
     description,
-    color
+    color,
+    textColor
   };
   yield call(addCategoryToDb, userId, newItemId, itemData)
 };
