@@ -1,5 +1,5 @@
 import CategoryActionTypes from './category.types'
-import { addCategory } from './category.utils';
+import { addCategory, removeCategory } from './category.utils';
 
 
 const INITIAL_STATE = {
@@ -30,6 +30,11 @@ const categoryReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         items: addCategory(state.items, action.payload)
+      }
+    case CategoryActionTypes.REMOVE_CATEGORY:
+      return {
+        ...state,
+        items: removeCategory(state.items, action.payload)
       }
     default:
       return state;

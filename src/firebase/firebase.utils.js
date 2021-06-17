@@ -200,6 +200,25 @@ export const removeItemFromDB = async (itemId) => {
   await batch.commit();
 }
 
+export const deleteCategoryFromDB = async (categoryId) => {
+  await firestore.collection('categories').doc(categoryId).delete();
+  const itemJunctions = await firestore
+    .collection(`junction_category_item`)
+    .where("categoryId", "==", categoryId)
+    .get();
+  const userJunctions = await firestore
+    .collection(`junction_user_category`)
+    .where("categoryId", "==", categoryId)
+    .get();
+  const batch = firestore.batch();
+  itemJunctions.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+  userJunctions.forEach(doc => {
+    batch.delete(doc.ref);
+  });
+  await batch.commit();
+}
 
 export const addCategoryToDb = async (userId, newItemId, itemData) => {
   const createdAt = new Date();

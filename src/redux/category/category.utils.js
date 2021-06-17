@@ -12,3 +12,5 @@ export const addCategory = (categoryItems, payload) => {
   }
   return [...categoryItems, { id: newItemId, title, description, color, textColor }]
 };
+
+export const removeCategory = (categoryItems, payload) => categoryItems.filter(item => item.id !== payload);

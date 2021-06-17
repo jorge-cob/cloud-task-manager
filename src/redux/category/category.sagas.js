@@ -2,7 +2,8 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { 
   getCurrentUser, 
   addCategoryToDb, 
-  fetchCategories
+  fetchCategories,
+  deleteCategoryFromDB
 } from '../../firebase/firebase.utils';
 import { fetchCategoriesFailure, fetchCategoriesSuccess } from './category.actions';
 
@@ -43,10 +44,21 @@ export function* addNewCategory(action) {
   yield call(addCategoryToDb, userId, newItemId, itemData)
 };
 
+export function* removeCategory(action) {
+  yield call(deleteCategoryFromDB, action.payload)
+};
+
 export function* addCategory() {
   yield takeLatest(
     CategoryActionTypes.ADD_CATEGORY,
     addNewCategory
+  )
+};
+
+export function* deleteCategory() {
+  yield takeLatest(
+    CategoryActionTypes.REMOVE_CATEGORY,
+    removeCategory
   )
 };
 
@@ -55,5 +67,6 @@ export function* categorySagas() {
   yield all([
     call(fetchCategoriesStart),
     call(addCategory),
+    call(deleteCategory)
   ]);
 };

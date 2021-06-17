@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { HexColorPicker } from 'react-colorful';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import Popup1 from '../popup/popup.component';
-import { addNewCategory } from '../../redux/category/category.actions';
-import { HexColorPicker } from 'react-colorful';
-import './color-picker.styles.css';
-import ColorPickerToggle from '../color-picker-toggle/color-picker-toggle.component';
+import { addNewCategory, removeCategory } from '../../redux/category/category.actions';
 import { selectCategoryProps } from '../../redux/category/category.selectors';
-import { useEffect } from 'react';
 
+import ColorPickerToggle from '../color-picker-toggle/color-picker-toggle.component';
+import Popup1 from '../popup/popup.component';
+
+import './color-picker.styles.css';
 
 
 const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
@@ -45,9 +44,14 @@ const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
       handleClose();
     }
   };
+
+  const handleDeleteCategory  = () => {
+    dispatch(removeCategory(category.id));
+    handleClose();
+  }
   
   return (
-    <Popup1 open={open} handleClose={handleClose} label='New Category' textColor={textColor} backgroundColor={color}>
+    <Popup1 open={open} handleClose={handleClose} label='Edit Category' textColor={textColor} backgroundColor={color}>
       <form  noValidate>
         <DialogContent>
             <TextField
@@ -83,6 +87,9 @@ const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
             </section>
         </DialogContent>
         <DialogActions>
+          <Button onClick={() => { if (window.confirm('Are you sure you wish to delete this category?')) handleDeleteCategory() }}>
+            Delete
+          </Button>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>

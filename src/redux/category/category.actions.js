@@ -14,6 +14,11 @@ export const addNewCategory = (newItemId, title, description, color, textColor) 
   }
 });
 
+export const removeCategory = categoryId => ({
+  type: CategoryActionTypes.REMOVE_CATEGORY,
+  payload: categoryId
+});
+
 export const fetchCategoriesStart = () => ({
   type: CategoryActionTypes.FETCH_CATEGORIES_START
 });
