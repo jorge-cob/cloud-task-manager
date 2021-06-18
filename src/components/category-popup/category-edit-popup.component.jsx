@@ -27,8 +27,8 @@ const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
   useEffect(() => {
     setTitle(category?.title);
     setDescription(category?.description);
-    setColor(category?.color);
-    setTextColor(category?.textColor);
+    setColor(category?.color || 'white');
+    setTextColor(category?.textColor || '#000000');
   }, [category]);
 
   const dispatch = useDispatch();
