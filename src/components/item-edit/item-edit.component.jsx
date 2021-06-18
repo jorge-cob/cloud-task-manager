@@ -26,7 +26,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
   const [ description, setDescription ] = useState(item.description);
   const [ isTodo, setIsTodo ] = useState(item.isTodo);
   const [ status, setStatus ] = useState(item.status);
-  const [ category, setCategory] = useState(categories);
+  const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = React.useState('');
   const [color, setColor] = useState(item?.color || '#f2f0eb');
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
