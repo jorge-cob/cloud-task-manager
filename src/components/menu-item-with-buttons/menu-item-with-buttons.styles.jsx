@@ -18,6 +18,7 @@ export const ContentContainer = styled.div`
   height: 50px;
   padding: 0 25px;
   align-items: center;
+  margin-right: auto;
   justify-content: center;
   opacity: 1;
   display: flex;

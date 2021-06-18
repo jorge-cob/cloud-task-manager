@@ -24,8 +24,6 @@ const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
   const [textColor, setTextColor] = useState('');
   const [titleErrorText, setTitleErrorText] = React.useState('');
 
-
-
   useEffect(() => {
     setTitle(category?.title);
     setDescription(category?.description);

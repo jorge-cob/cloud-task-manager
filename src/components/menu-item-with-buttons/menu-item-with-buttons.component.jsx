@@ -1,4 +1,7 @@
 import React, { forwardRef } from 'react';
+import { useSelector } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
+import { selectCategoryItems } from '../../redux/category/category.selectors';
 
 import {
   MenuItemContainer,
@@ -7,8 +10,7 @@ import {
   ButtonHolder
 } from './menu-item-with-buttons.styles';
 
-const MenuItemWithButtons = forwardRef(({ title, id, onClick, onEditButtonClick, onDeleteButtonClick, Icon, Menu, hidden, ...props }, ref) => {
-
+const MenuItemWithButtons = forwardRef(({ title, id, onClick, categories, onEditButtonClick, onDeleteButtonClick, Icon, Menu, hidden, ...props }, ref) => {
   const handleEditButtonClick = e => {
     e.stopPropagation();
     onEditButtonClick();
@@ -17,7 +19,9 @@ const MenuItemWithButtons = forwardRef(({ title, id, onClick, onEditButtonClick,
   const handleDeleteItem = e => {
     onDeleteButtonClick();
   }
-
+  const {allCategories} = useSelector(createStructuredSelector({
+    allCategories: selectCategoryItems,
+  }));
 
   return (
     <MenuItemContainer
@@ -26,6 +30,17 @@ const MenuItemWithButtons = forwardRef(({ title, id, onClick, onEditButtonClick,
       {...props}
       hidden={hidden}
     >
+      {
+        categories && categories.map(cat => {
+          const fullCat = allCategories.find(
+            item => item.id === cat
+          ) 
+          return (
+            <div key={fullCat.id} style={{height: '100%', width: '18px', backgroundColor: `${fullCat?.color || 'white'}`}}></div>      
+          )
+        }
+        )
+      }
       <ContentContainer>
       {Icon}
         <ContentTitle>{ title }</ContentTitle>
