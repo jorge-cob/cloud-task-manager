@@ -14,6 +14,7 @@ import ColorPickerToggle from '../color-picker-toggle/color-picker-toggle.compon
 import Popup1 from '../popup/popup.component';
 
 import './color-picker.styles.css';
+import { removeCategoryFromFilter } from '../../redux/directory/directory.actions';
 
 
 const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
@@ -45,6 +46,7 @@ const CategoryEditPopup = ({ open, handleClose, selectedCategory }) => {
 
   const handleDeleteCategory  = () => {
     dispatch(removeCategory(category.id));
+    dispatch(removeCategoryFromFilter(category.id));
     handleClose();
   }
   

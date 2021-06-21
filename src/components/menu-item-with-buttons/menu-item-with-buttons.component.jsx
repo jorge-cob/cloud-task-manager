@@ -36,7 +36,7 @@ const MenuItemWithButtons = forwardRef(({ title, id, onClick, categories, onEdit
             item => item.id === cat
           ) 
           return (
-            <div key={fullCat.id} style={{height: '100%', width: '18px', backgroundColor: `${fullCat?.color || 'white'}`}}></div>      
+            <div key={fullCat?.id || ref } style={{height: '100%', width: '18px', backgroundColor: `${fullCat?.color || 'white'}`}}></div>      
           )
         }
         )
