@@ -57,7 +57,6 @@ export const FilteredCategoryChip = styled.div`
 `;
 
 export const TodoMenuContainer = styled.div`
-  position: absolute;
   left: 75%;
   top: 170px;
 `;
@@ -65,7 +64,6 @@ export const TodoMenuContainer = styled.div`
 export const TodoStatusContainer = styled.div`
   flex-direction: column;
   width: 160px;
-  position: absolute;
   right: -110px;
 `;
 
@@ -78,6 +76,7 @@ export const FilterContainer = styled.div`
   flex-direction: row;
   align-items: center;
   width: 80%;
+  justify-content: space-between;
 `;
 
 
