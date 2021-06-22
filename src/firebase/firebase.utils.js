@@ -179,7 +179,7 @@ export const addItemToDB = async (itemData) => {
   await Promise.all(
     junctions.docs
       .filter(doc => doc.exists)
-      .map(doc => firestore.doc(`junction_category_item/${doc.data().categories}_${doc.data().itemId}`).delete())
+      .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
   );
   return categories.forEach(async cat => {
     const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
