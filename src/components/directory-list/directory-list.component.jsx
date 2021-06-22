@@ -61,7 +61,6 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   useEffect(() => {
     setDraggableItems(items);
   }, [items])
- 
 
   const [activeId, setActiveId] = useState(null);
 
@@ -93,7 +92,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
       >
         { 
           draggableItems.map(item => {
-            const { id, title, isTodo, status, color, ...otherItemsProps } = item;
+            const { isTodo, status, id, title, color, ...otherItemProps } = item;
             const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
             const icon = isTodo && getStatusIcon(status, iconMenuItem);
             const isDraggingItem = activeId === id; 
@@ -101,7 +100,6 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             return (
               showItem && 
                 <SortableMenuItemWithButtons 
-                  title={title.toUpperCase()}
                   onClick={() => handleClickOpenDetailPopup(item)}
                   onEditButtonClick={() => handleClickOpenEditPopup(item)}
                   onDeleteButtonClick={() => handleClickDeleteItem(id)}
@@ -109,9 +107,9 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
                   Icon={icon}
                   Menu={ItemManagerItemMoreOptions}
                   key={id}
-                  id={id}
-                  {...otherItemsProps}
+                  item={item}
                   hidden={isDraggingItem}
+                  {...otherItemProps}
                 />
             )
           })

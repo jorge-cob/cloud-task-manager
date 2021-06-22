@@ -91,7 +91,7 @@ const Directory = () => {
 
   const handleEditItem = (categoryId, title, description, isTodo, status, color, index) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem(categoryId, selectedItem.id, title, description, isTodo, status, color, index));
+    dispatch(addNewItem({categories: categoryId, id:selectedItem.id, title, description, isTodo, status, color, index}));
   };
   
   return (

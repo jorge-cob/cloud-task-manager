@@ -1,17 +1,8 @@
 import DirectoryActionTypes from './directory.types';
 
-export const addNewItem = (categoryId = '', newItemId, title, description, isTodo, status, color, index) => ({
+export const addNewItem = itemProps => ({
   type: DirectoryActionTypes.ADD_ITEM,
-  payload: {
-    categoryId,
-    newItemId,
-    title,
-    description,
-    isTodo,
-    status,
-    color,
-    index
-  }
+  payload: itemProps
 });
 
 export const removeItem = itemId => ({

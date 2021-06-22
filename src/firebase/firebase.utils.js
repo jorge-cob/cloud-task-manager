@@ -167,23 +167,23 @@ export const getCurrentUser = () => {
   });
 };
 
-export const addItemToDB = async (categoryId, newItemId, itemData) => {
+export const addItemToDB = async (itemData) => {
   const createdAt = new Date();
-
-  await firestore.collection('items').doc(newItemId).set({...itemData, createdAt: createdAt});
+  const { categories, id } = itemData;
+  await firestore.collection('items').doc(id).set({...itemData, createdAt: createdAt});
   const junctions = await firestore
   .collection(`junction_category_item`)
-  .where("itemId", "==", newItemId)
+  .where("itemId", "==", id)
   .get();
 
   await Promise.all(
     junctions.docs
       .filter(doc => doc.exists)
-      .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
+      .map(doc => firestore.doc(`junction_category_item/${doc.data().categories}_${doc.data().itemId}`).delete())
   );
-  return categoryId.forEach(async cat => {
-    const junctionRef = firestore.doc(`junction_category_item/${cat}_${newItemId}`);
-    await junctionRef.set({ categoryId: cat, itemId: newItemId, createdAt: createdAt });
+  return categories.forEach(async cat => {
+    const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
+    await junctionRef.set({ categoryId: cat, itemId: id, createdAt: createdAt });
   })
 };
 
