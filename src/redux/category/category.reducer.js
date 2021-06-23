@@ -36,6 +36,8 @@ const categoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         items: removeCategory(state.items, action.payload)
       }
+    case CategoryActionTypes.SIGN_OUT_SUCCESS:
+      return INITIAL_STATE;
     default:
       return state;
   }

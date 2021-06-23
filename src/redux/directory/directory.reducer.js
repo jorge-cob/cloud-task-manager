@@ -8,7 +8,7 @@ const INITIAL_STATE = {
   errorMessage: undefined,
   filteredCategories: [],
   statusFilter: ['pending', 'done'],
-  filterType: ['all']
+  filterType: 'all'
 };
 
 const directoryReducer = (state = INITIAL_STATE, action) => {
@@ -70,6 +70,8 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         ...state,
         items: action.payload.items
       }
+    case DirectoryActionTypes.SIGN_OUT_SUCCESS:
+      return INITIAL_STATE;
     default:
       return state;
   }
