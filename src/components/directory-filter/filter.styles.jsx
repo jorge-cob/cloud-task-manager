@@ -19,7 +19,7 @@ export const CategoryChip = styled.div`
   margin-right: 5px;
   display: flex;
   padding: 0px 10px 0px 10px;
-  border: 1px solid transparent;
+  border: 1px solid black;
   border-radius: 14px;
   font-size: 14px;
   justify-content: center;

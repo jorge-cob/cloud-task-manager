@@ -70,7 +70,7 @@ const CategoryPopup = ({ open, handleClose }) => {
               selectedColor={textColor}
               handleChange={col => setTextColor(col)}
               label='Text Color'
-              colors={['#f2f0eb', '#000000', 'red', 'yellow']}
+              colors={['#f2f0eb', '#000000', 'red', 'yellow', 'blue', 'green', 'brown']}
             />
             <section className='custom-color-picker'>
               <HexColorPicker color={color} onChange={setColor} />
