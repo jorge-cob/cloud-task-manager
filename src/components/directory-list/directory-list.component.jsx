@@ -107,6 +107,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
                   Icon={icon}
                   Menu={ItemManagerItemMoreOptions}
                   key={id}
+                  id={id}
                   item={item}
                   hidden={isDraggingItem}
                   {...otherItemProps}
@@ -126,6 +127,8 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             onDeleteButtonClick={() => {}}
             Icon={draggingItem.isTodo && getStatusIcon(draggingItem.status, iconMenuItem)}
             Menu={ItemManagerItemMoreOptions} 
+            item={items.find(x => x.id === activeId)}
+
           /> 
         : null}
       </DragOverlay>
