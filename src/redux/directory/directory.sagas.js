@@ -37,7 +37,7 @@ export function* fetchItemsStart() {
 
 export function* addNewItem(action) {
   const userAuth = yield getCurrentUser();
-  const { categories, id, title, description, isTodo, status, color, index } = action.payload;
+  const { categories, id, title, description, isTodo, status, color, index, dateTime } = action.payload;
   const userItemsRef = yield call(createUserItemsDocument, userAuth);
   const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('index', 'desc').get();
   const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
@@ -58,6 +58,7 @@ export function* addNewItem(action) {
     color: color,
     index: computedIndex,
     categories,
+    dateTime,
     id
   };
   yield call(addItemToDB, itemData);

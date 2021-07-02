@@ -97,7 +97,8 @@ export const convertItemsSnapshotToMap = (items) => {
       description,
       isTodo,
       color,
-      index
+      index,
+      dateTime
     } = doc.data();
     return {
       id: doc.id,
@@ -106,7 +107,8 @@ export const convertItemsSnapshotToMap = (items) => {
       description,
       isTodo,
       color,
-      index
+      index,
+      dateTime
     }
   });
   return transformedItem;

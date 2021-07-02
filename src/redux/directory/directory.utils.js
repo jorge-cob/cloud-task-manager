@@ -1,16 +1,16 @@
 export const addItem = (directoryItems, payload) => {
-  const { id, categories, title, description, isTodo, status, color, index } = payload;
+  const { id, categories, title, description, isTodo, status, color, index, dateTime } = payload;
   const existingItem = directoryItems.find(
     item => item.id === id
   );
   if (existingItem) {
     return directoryItems.map(item => 
       item.id === id
-        ? { ...item, title: title, description: description, isTodo: isTodo, status: status, categories: categories, color: color, index: index } 
+        ? { ...item, title: title, description: description, isTodo: isTodo, status: status, categories: categories, color: color, index: index, dateTime: dateTime } 
         : item 
     )
   }
-  return [{ id: id, title: title, description: description, isTodo: isTodo, status: status, categories: categories, color: color, index: directoryItems.length > 0 ? directoryItems[0].index + 100000000 : 100000000 }, ...directoryItems]
+  return [{ id: id, title: title, description: description, isTodo: isTodo, status: status, categories: categories, color: color, dateTime:dateTime, index: directoryItems.length > 0 ? directoryItems[0].index + 100000000 : 100000000 }, ...directoryItems]
 };
 
 export const removeItem = (directoryItems, payload) => directoryItems.filter(item => item.id !== payload);

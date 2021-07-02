@@ -15,7 +15,9 @@ import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbo
 
 import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
-
+import { DatePicker, Space } from 'antd';
+import moment from 'moment';
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 
 const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const {categories} = useSelector(createStructuredSelector({
@@ -28,13 +30,13 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = useState('');
   const [color, setColor] = useState('#f2f0eb');
-
+  const [dateTime, setDateTime] = useState('');
   const onSubmit = () => {
     if (!title) {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, color);
+      handleSubmit(category, title, description, isTodo, status, color, dateTime);
     }
 
   };
@@ -48,6 +50,10 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
       }
     }
     setCategory(value);
+  };
+
+  const handleDateChange = (date, dateString) => {
+    setDateTime(dateString);
   };
 
   return (
@@ -102,6 +108,17 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
         <section className='custom-color-picker'>
           <HexColorPicker color={color} onChange={setColor} />
         </section>
+        <Space direction="vertical" size={12}>
+        <DatePicker
+          format='YYYY-MM-DD HH:mm'
+          
+          showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+          onChange={handleDateChange}
+          getPopupContainer={(triggerNode) => {
+            return triggerNode.parentNode;
+          }}
+        />
+      </Space>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">

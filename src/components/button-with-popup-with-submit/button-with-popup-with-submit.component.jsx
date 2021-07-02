@@ -19,10 +19,10 @@ const ButtonWithPopupWithSubmit = ({ label, popupLabel, onOpenCategoryPopup }) =
     setOpenPopup(false);
   };
 
-  const handleNewItem = (categoryId, title, description, isTodo, status, color) => {
+  const handleNewItem = (categoryId, title, description, isTodo, status, color, dateTime) => {
     const newItemId = uuidv4();
     handleClosePopup();
-    dispatch(addNewItem({categories: categoryId, id: newItemId, title, description, isTodo, status, color}));
+    dispatch(addNewItem({categories: categoryId, id: newItemId, title, description, isTodo, status, color, dateTime}));
   };
 
   return (
