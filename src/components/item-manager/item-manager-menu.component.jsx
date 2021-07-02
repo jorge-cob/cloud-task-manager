@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   cardIcon: {
     width: '1.5rem',
     height: '1.5rem',
-    padding: 0,
+    padding: '20px',
     '& >span': {
       width: 'auto',
       '&> svg': {
