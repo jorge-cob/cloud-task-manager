@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCategoryItems } from '../../redux/category/category.selectors';
 import { addNewItem } from '../../redux/directory/directory.actions';
+import moment from 'moment';
 
 import {
   MenuItemContainer,
@@ -13,7 +14,7 @@ import {
 } from './menu-item-with-buttons.styles';
 
 const MenuItemWithButtons = forwardRef(({ onClick, categories, onEditButtonClick, onDeleteButtonClick, Icon, Menu, hidden, item, ...props }, ref) => {
-  const { title, id, status, isTodo } = item;
+  const { title, id, status, isTodo, dateTime } = item;
   const dispatch = useDispatch();
   const handleEditButtonClick = e => {
     e.stopPropagation();
@@ -51,6 +52,9 @@ const MenuItemWithButtons = forwardRef(({ onClick, categories, onEditButtonClick
         {Icon}
         <ContentTitle>{ title }</ContentTitle>
       </ContentContainer>
+      {dateTime && 
+        <ContentContainer>{moment(dateTime).format('DD-MM-YY HH:mm' )}</ContentContainer>     
+      }
       <ButtonHolder>
         {
           isTodo && status === 'pending' &&
