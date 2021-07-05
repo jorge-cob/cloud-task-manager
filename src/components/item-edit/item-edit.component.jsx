@@ -17,7 +17,7 @@ import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
 import { DatePicker } from 'antd';
 import moment from 'moment';
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import '../../assets/styles/date-picker-without-global.styles.css'; // or 'antd/dist/antd.less'
 import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
 

@@ -19,7 +19,7 @@ import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
-import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+import '../../assets/styles/date-picker-without-global.styles.css'; // or 'antd/dist/antd.less'
 
 const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const {categories} = useSelector(createStructuredSelector({
