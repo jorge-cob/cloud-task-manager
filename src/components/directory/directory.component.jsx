@@ -89,9 +89,9 @@ const Directory = () => {
     dispatch(removeItem(id));
   };
 
-  const handleEditItem = (categoryId, title, description, isTodo, status, color, index) => {
+  const handleEditItem = (categoryId, title, description, isTodo, status, color, index, dateTime) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem({categories: categoryId, id:selectedItem.id, title, description, isTodo, status, color, index}));
+    dispatch(addNewItem({categories: categoryId, id:selectedItem.id, title, description, isTodo, status, color, index, dateTime}));
   };
   
   return (

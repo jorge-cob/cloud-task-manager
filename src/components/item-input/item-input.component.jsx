@@ -7,6 +7,8 @@ import {
   TextField,
   DialogActions,
   DialogContent,
+  Checkbox,
+  FormControlLabel
 } from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
@@ -31,15 +33,21 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [titleErrorText, setTitleErrorText] = useState('');
   const [color, setColor] = useState('#f2f0eb');
   const [dateTime, setDateTime] = useState('');
+  const [hasDate, setHasDate] = useState(false);
+
   const onSubmit = () => {
     if (!title) {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, color, dateTime);
+      handleSubmit(category, title, description, isTodo, status, color, hasDate ? dateTime : '');
     }
-
   };
+  
+  function handleShowDate() {
+    if(!hasDate) { setDateTime(moment().format('YYYY-MM-DD HH:mm'))};
+    setHasDate(!hasDate);
+  }
 
   const handleChangeMultipleCategories = (event) => {
     const { options } = event.target;
@@ -109,15 +117,20 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
           <HexColorPicker color={color} onChange={setColor} />
         </section>
         <Space direction="vertical" size={12}>
-        <DatePicker
-          format='YYYY-MM-DD HH:mm'
-          
-          showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
-          onChange={handleDateChange}
-          getPopupContainer={(triggerNode) => {
-            return triggerNode.parentNode;
-          }}
+        <FormControlLabel
+            control={<Checkbox checked={hasDate} onChange={handleShowDate} name="checkedA" />}
+            label="Has date"
         />
+        {hasDate && 
+          <DatePicker
+            format='YYYY-MM-DD HH:mm'
+            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+            onChange={handleDateChange}
+            getPopupContainer={(triggerNode) => {
+              return triggerNode.parentNode;
+            }}
+          />
+        }
       </Space>
       </DialogContent>
       <DialogActions>

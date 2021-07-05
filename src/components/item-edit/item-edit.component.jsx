@@ -7,12 +7,17 @@ import {
   TextField,
   DialogActions,
   DialogContent,
+  Checkbox,
+  FormControlLabel
 } from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
 import CategoryPopup from '../category-popup/category-popup.component';
 import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
+import { DatePicker } from 'antd';
+import moment from 'moment';
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
 
@@ -27,10 +32,11 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
   const [ isTodo, setIsTodo ] = useState(item.isTodo);
   const [ status, setStatus ] = useState(item.status);
   const [ category, setCategory] = useState([]);
+  const [dateTime, setDateTime] = useState(item.dateTime);
   const [titleErrorText, setTitleErrorText] = React.useState('');
   const [color, setColor] = useState(item?.color || '#f2f0eb');
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
-
+  const [hasDate, setHasDate] = useState(!!dateTime);
   useEffect(() => {
     const selectedCategoriesIds = categories && categories.map(category => category.id);
    setCategory(selectedCategoriesIds);
@@ -41,7 +47,7 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, color, item.index);
+      handleSubmit(category, title, description, isTodo, status, color, item.index, hasDate ? dateTime : '');
     }
 
   };
@@ -55,6 +61,11 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
     setIsCategoryOpenPopup(false);
   };
 
+  function handleShowDate() {
+    if(!hasDate) { setDateTime(moment().format('YYYY-MM-DD HH:mm'))};
+    setHasDate(!hasDate);
+  }
+
   const handleChangeMultipleCategories = (event) => {
     const { options } = event.target;
     const value = [];
@@ -64,6 +75,10 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
       }
     }
     setCategory(value);
+  };
+
+  const handleDateChange = (date, dateString) => {
+    setDateTime(dateString);
   };
 
   const handleChangeStatus = e => {
@@ -126,6 +141,23 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
         <section className='custom-color-picker'>
           <HexColorPicker color={color} onChange={setColor} />
         </section>
+        
+        <FormControlLabel
+            control={<Checkbox checked={hasDate} onChange={handleShowDate} name="checkedA" />}
+            label="Has date"
+        />
+        { hasDate &&
+          <DatePicker
+            format='YYYY-MM-DD HH:mm'
+            defaultValue={null}
+            value={ moment(dateTime)} 
+            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+            onChange={handleDateChange}
+            getPopupContainer={(triggerNode) => {
+              return triggerNode.parentNode;
+            }}
+          />
+        }
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
