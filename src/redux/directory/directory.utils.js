@@ -26,3 +26,7 @@ export const itemIsBeingShown = (item, filteredCategories, filteredStatus, filte
 
   return isCategoryFiltered && typeFilter && statusIsFiltered;
 };
+
+export const itemsBeingShown = (items, filteredCategories, filteredStatus, filterType) => {
+  return items.filter(item => itemIsBeingShown(item, filteredCategories, filteredStatus, filterType));
+};

@@ -8,4 +8,5 @@ export const DirectoryMenuContainer = styled.div`
 export const DirectoryContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 `;

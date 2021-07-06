@@ -35,17 +35,29 @@ import {
 
 import { setItems } from '../../redux/directory/directory.actions';
 
-import { itemIsBeingShown } from '../../redux/directory/directory.utils';
+import { itemsBeingShown } from '../../redux/directory/directory.utils';
 
 const useStyles = makeStyles({
   iconMenuItem: {
     marginRight: '20px',
     width: '1.5rem',
   },
+  emptyDirectoryItem: {
+    minWidth: '100%',
+    height: '50px',
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    border: '1px solid black',
+    margin: '15px 0', 
+    fontWeight: '700',
+    fontSize: '28px'
+  }
 });
 
 const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, handleClickDeleteItem}) => {
-  const { iconMenuItem } = useStyles();
+  const { iconMenuItem, emptyDirectoryItem } = useStyles();
   const dispatch = useDispatch();
 
   const {items, filteredCategories, filterType, filteredStatus} = useSelector(createStructuredSelector({
@@ -55,12 +67,17 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     filteredStatus: selectDirectoryFilteredStatus
   }));
   
+
   const [draggableItems, setDraggableItems] = useState([]);
   const [draggingItem, setDraggingItem] = useState({});
+  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
     setDraggableItems(items);
   }, [items])
+  useEffect(() => {
+    setFilteredItems(itemsBeingShown(items, filteredCategories, filteredStatus, filterType));
+  }, [items, filteredCategories, filteredStatus, filterType]);
 
   const [activeId, setActiveId] = useState(null);
 
@@ -90,15 +107,16 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         items={draggableItems}
         strategy={verticalListSortingStrategy}
       >
-        { 
-          draggableItems.map(item => {
+        { filteredItems.length === 0 &&
+          <div className={emptyDirectoryItem}> There are no items matching current filters.</div>
+} 
+        { filteredItems.length !== 0 &&
+          filteredItems.map(item => {
             const { isTodo, status, id, title, color, ...otherItemProps } = item;
-            const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
             const icon = isTodo && getStatusIcon(status, iconMenuItem);
             const isDraggingItem = activeId === id; 
 
             return (
-              showItem && 
                 <SortableMenuItemWithButtons 
                   onClick={() => handleClickOpenDetailPopup(item)}
                   onEditButtonClick={() => handleClickOpenEditPopup(item)}
