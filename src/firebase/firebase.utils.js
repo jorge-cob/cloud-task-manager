@@ -62,7 +62,6 @@ export const createItemsDocument = async (userAuth, itemData) => {
   const itemRef = firestore.doc(`items/${id}`);
   const snapShot = await itemRef.get();
   if(!snapShot.exists) {
-   
     const createdAt = new Date();
     try {
       await firestore.collection('items').doc(id).set({ userId: userAuth.uid, categories, id, title, description, isTodo, status, color, index: computedIndex, dateTime, createdAt: createdAt});  
@@ -81,6 +80,12 @@ export const createItemsDocument = async (userAuth, itemData) => {
       })
     } catch (err) {
       console.log('error creating item', err.message);
+    }
+  } else {
+    try {
+      await firestore.collection('items').doc(id).update({categories, id, title, description, isTodo, status, color, index: computedIndex, dateTime});
+    } catch (err) {
+      console.log('error updating item', err.message);
     }
   }
   return itemRef;

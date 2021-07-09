@@ -39,7 +39,7 @@ export function* addItem(itemData) {
 
   try {
     const userAuth = yield getCurrentUser();
-    const { id} = itemData.payload;
+    const { id } = itemData.payload;
     const itemRef = yield call(createItemsDocument, userAuth, itemData);    
     const itemSnapshot = yield itemRef.get();
     yield put(

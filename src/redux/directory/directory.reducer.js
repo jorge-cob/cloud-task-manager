@@ -35,7 +35,7 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         errorMessage: null,
-        items: [...state.items, action.payload]
+        items: addItem(state.items, action.payload)
       }
     case DirectoryActionTypes.REMOVE_ITEM:
       return {
