@@ -2,13 +2,13 @@ import { takeLatest, call, put, all } from 'redux-saga/effects';
 import { 
   getCurrentUser, 
   convertItemsSnapshotToMap,
-  addItemToDB, 
   createUserItemsDocument,
   getItemCategories,
   removeItemFromDB,
   changeItemIndex,
+  createItemsDocument,
 } from '../../firebase/firebase.utils';
-import { fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
+import { addItemFailure, addItemSuccess, fetchItemsFailure, fetchItemsSuccess } from './directory.actions';
 
 import DirectoryActionTypes from './directory.types';
 
@@ -35,39 +35,26 @@ export function* fetchItemsStart() {
 };
 
 
-export function* addNewItem(action) {
-  const userAuth = yield getCurrentUser();
-  const { categories, id, title, description, isTodo, status, color, index, dateTime } = action.payload;
-  const userItemsRef = yield call(createUserItemsDocument, userAuth);
-  const userItemsSnapshot = yield userItemsRef.where('userId', '==', userAuth.uid).orderBy('index', 'desc').get();
-  const itemsMap = yield call(convertItemsSnapshotToMap, userItemsSnapshot);
-  const itemsWithCategoriesMap = yield call(getItemCategories, itemsMap);
-  let computedIndex = index;
-  if (!index && itemsWithCategoriesMap.length === 0) {
-    computedIndex = 1000000000;
-  } else if (!index) {
-    computedIndex = itemsWithCategoriesMap[0].index + 100000000;
-  }
+export function* addItem(itemData) {
 
-  const itemData = {
-    userId: userAuth.uid,
-    title,
-    isTodo,
-    status,
-    description,
-    color: color,
-    index: computedIndex,
-    categories,
-    dateTime,
-    id
-  };
-  yield call(addItemToDB, itemData);
+  try {
+    const userAuth = yield getCurrentUser();
+    const { id} = itemData.payload;
+    const itemRef = yield call(createItemsDocument, userAuth, itemData);    
+    const itemSnapshot = yield itemRef.get();
+    yield put(
+      addItemSuccess({...itemSnapshot.data(), id})
+    );
+  
+  } catch(err) {
+    yield put(addItemFailure(err));
+  }
 };
 
-export function* addItem() {
+export function* onAddItemStart() {
   yield takeLatest(
-    DirectoryActionTypes.ADD_ITEM,
-    addNewItem
+    DirectoryActionTypes.ADD_ITEM_START,
+    addItem
   )
 };
 
@@ -98,8 +85,8 @@ export function* reindexItem() {
 export function* directorySagas() {
   yield all([
     call(fetchItemsStart),
-    call(addItem),
+    call(onAddItemStart),
     call(removeItem),
-    call(reindexItem)
+    call(reindexItem),
   ]);
 };

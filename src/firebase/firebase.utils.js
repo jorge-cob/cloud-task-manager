@@ -41,6 +41,53 @@ export const createUserItemsDocument = async (userAuth) => {
   return firestore.collection('items');
 };
 
+export const createItemsDocument = async (userAuth, itemData) => {
+  if(!userAuth) return;
+  const { categories, id, title, description, isTodo, status, color, index, dateTime } = itemData.payload;
+  const itemsRef = firestore.collection('items');
+  const userItemsSnapshot = await itemsRef.where('userId', '==', userAuth.uid).orderBy('index', 'desc').get();
+  let isFirst = 0;
+  let indexToCompute = '';
+  let itemCount = 0;
+  userItemsSnapshot.forEach(doc => {
+    indexToCompute = isFirst === 0 ?  doc.data().index : indexToCompute;
+    itemCount++;
+  });
+  let computedIndex = index;
+  if (!index && itemCount === 0) {
+    computedIndex = 1000000000;
+  } else if (!index) {
+    computedIndex = indexToCompute + 100000000;
+  }
+  const itemRef = firestore.doc(`items/${id}`);
+  const snapShot = await itemRef.get();
+  if(!snapShot.exists) {
+   
+    const createdAt = new Date();
+    try {
+      await firestore.collection('items').doc(id).set({ userId: userAuth.uid, categories, id, title, description, isTodo, status, color, index: computedIndex, dateTime, createdAt: createdAt});  
+      const junctions = await firestore
+      .collection(`junction_category_item`)
+      .where("itemId", "==", id)
+      .get();
+      await Promise.all(
+        junctions.docs
+          .filter(doc => doc.exists)
+          .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
+      );
+      categories.forEach(async cat => {
+        const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
+        await junctionRef.set({ categoryId: cat, itemId: id, createdAt: createdAt });
+      })
+    } catch (err) {
+      console.log('error creating item', err.message);
+    }
+  }
+  return itemRef;
+};
+
+
+
 export const fetchItemCategories = async (action) => {
   const junctions = await firestore
   .collection(`junction_category_item`)
@@ -56,10 +103,6 @@ export const fetchItemCategories = async (action) => {
   return categories.filter(doc => doc.exists).map(doc => ({ id: doc.id, ...doc.data() }));
 };
 
-export const createUserCategoriesDocument = async (userAuth) => {
-  if(!userAuth) return;
-  return firestore.collection('categories');
-};
 
 export const fetchCategories = async (userAuth) => {
   const junctions = await firestore
@@ -114,50 +157,11 @@ export const convertItemsSnapshotToMap = (items) => {
   return transformedItem;
 };
 
-export const convertCategoriesSnapshotToMap = (categories) => {
-  const transformedCategory = categories.docs.map(doc => {
-    const {
-      title,
-      description,
-      color,
-      textColor
-    } = doc.data();
-    return {
-      id: doc.id,
-      title,
-      description,
-      color,
-      textColor
-    }
-  });
-  return transformedCategory;
-};
-
-
-
 if (!firebase.apps.length) {
   firebase.initializeApp(config);
 }else {
   firebase.app(); // if already initialized, use that one
 }
-
-export const convertCollectionsSnapshotTopMap = (collections) => {
-  const transformedCollection = collections.docs.map(doc => {
-    const { title, items } = doc.data();
-    
-    return {
-      routeName: encodeURI(title.toLowerCase()),
-      id: doc.id,
-      title,
-      items
-    }
-  });
-
-  return transformedCollection.reduce((accumulator, collection) => {
-    accumulator[collection.title.toLowerCase()] = collection;
-    return accumulator;
-  }, {});
-};
 
 
 export const getCurrentUser = () => {
@@ -167,26 +171,6 @@ export const getCurrentUser = () => {
       resolve(userAuth);
     }, reject);
   });
-};
-
-export const addItemToDB = async (itemData) => {
-  const createdAt = new Date();
-  const { categories, id } = itemData;
-  await firestore.collection('items').doc(id).set({...itemData, createdAt: createdAt});
-  const junctions = await firestore
-  .collection(`junction_category_item`)
-  .where("itemId", "==", id)
-  .get();
-
-  await Promise.all(
-    junctions.docs
-      .filter(doc => doc.exists)
-      .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
-  );
-  return categories.forEach(async cat => {
-    const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
-    await junctionRef.set({ categoryId: cat, itemId: id, createdAt: createdAt });
-  })
 };
 
 export const removeItemFromDB = async (itemId) => {

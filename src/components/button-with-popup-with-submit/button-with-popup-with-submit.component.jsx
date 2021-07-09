@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-import { addNewItem } from '../../redux/directory/directory.actions';
+import { addItemStart } from '../../redux/directory/directory.actions';
 
 import CustomButton from '../custom-button/custom-button.component';
 import Popup1 from '../popup/popup.component';
@@ -22,7 +22,7 @@ const ButtonWithPopupWithSubmit = ({ label, popupLabel, onOpenCategoryPopup }) =
   const handleNewItem = (categoryId, title, description, isTodo, status, color, dateTime) => {
     const newItemId = uuidv4();
     handleClosePopup();
-    dispatch(addNewItem({categories: categoryId, id: newItemId, title, description, isTodo, status, color, dateTime}));
+    dispatch(addItemStart({categories: categoryId, id: newItemId, title, description, isTodo, status, color, dateTime}));
   };
 
   return (

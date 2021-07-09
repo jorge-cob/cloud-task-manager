@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { Button } from '@material-ui/core';
 
-import { addNewItem, removeItem } from '../../redux/directory/directory.actions';
+import { addItemStart, removeItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
 
 import Popup1 from '../popup/popup.component';
@@ -91,7 +91,7 @@ const Directory = () => {
 
   const handleEditItem = (categoryId, title, description, isTodo, status, color, index, dateTime) => {
     setIsEditPopupOpen(false);
-    dispatch(addNewItem({categories: categoryId, id:selectedItem.id, title, description, isTodo, status, color, index, dateTime}));
+    dispatch(addItemStart({categories: categoryId, id:selectedItem.id, title, description, isTodo, status, color, index, dateTime}));
   };
   
   return (

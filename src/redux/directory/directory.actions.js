@@ -1,9 +1,21 @@
 import DirectoryActionTypes from './directory.types';
 
-export const addNewItem = itemProps => ({
-  type: DirectoryActionTypes.ADD_ITEM,
-  payload: itemProps
+export const addItemStart = itemData => ({
+  type: DirectoryActionTypes.ADD_ITEM_START,
+  payload: itemData
 });
+
+export const addItemSuccess = itemData => ({
+  type: DirectoryActionTypes.ADD_ITEM_SUCCESS,
+  payload: itemData
+});
+
+export const addItemFailure = error => ({
+  type: DirectoryActionTypes.ADD_ITEM_FAILURE,
+  payload: error
+});
+
+
 
 export const removeItem = itemId => ({
   type: DirectoryActionTypes.REMOVE_ITEM,

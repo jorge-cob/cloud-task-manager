@@ -3,7 +3,7 @@ import React, { forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectCategoryItems } from '../../redux/category/category.selectors';
-import { addNewItem } from '../../redux/directory/directory.actions';
+import { addItemStart } from '../../redux/directory/directory.actions';
 import moment from 'moment';
 
 import {
@@ -21,7 +21,7 @@ const MenuItemWithButtons = forwardRef(({ onClick, categories, onEditButtonClick
     onEditButtonClick();
   };
   function handleItemIsDone() {
-    dispatch(addNewItem({...item, status: 'done'}));
+    dispatch(addItemStart({...item, status: 'done'}));
   }
   const handleDeleteItem = e => {
     onDeleteButtonClick();

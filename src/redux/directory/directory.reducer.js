@@ -24,16 +24,18 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
         items: action.payload,
         isFetching: false
       }
+    case DirectoryActionTypes.ADD_ITEM_FAILURE:
     case DirectoryActionTypes.FETCH_ITEMS_FAILURE:
       return {
         ...state,
         isFetching: false,
         errorMessage: action.payload
       }
-    case DirectoryActionTypes.ADD_ITEM:
+    case DirectoryActionTypes.ADD_ITEM_SUCCESS:
       return {
         ...state,
-        items: addItem(state.items, action.payload)
+        errorMessage: null,
+        items: [...state.items, action.payload]
       }
     case DirectoryActionTypes.REMOVE_ITEM:
       return {
