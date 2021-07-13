@@ -12,13 +12,14 @@ import {
 } from '@material-ui/core';
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
-import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
 
 import { HexColorPicker } from 'react-colorful';
-import './color-picker.styles.css';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
+import MultiSelect from 'react-multi-select-component';
+
+import './color-picker.styles.css';
 import '../../assets/styles/date-picker-without-global.styles.css'; // or 'antd/dist/antd.less'
 
 const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
@@ -29,18 +30,27 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
   const [ description, setDescription ] = useState('');
   const [ isTodo, setIsTodo ] = useState(false);
   const [ status, setStatus ] = useState('pending');
-  const [ category, setCategory] = useState([]);
   const [titleErrorText, setTitleErrorText] = useState('');
   const [color, setColor] = useState('#f2f0eb');
   const [dateTime, setDateTime] = useState('');
   const [hasDate, setHasDate] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const destructuredCategories = [];
+
+  categories.forEach(cat => {
+    destructuredCategories.push({label: cat.title, value: cat.id});
+  });
+
+
 
   const onSubmit = () => {
     if (!title) {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, color, hasDate ? dateTime : '');
+      const selectedCategoriesIds = selectedCategories.map(cat => cat.value);
+      handleSubmit(selectedCategoriesIds, title, description, isTodo, status, color, hasDate ? dateTime : '');
     }
   };
   
@@ -48,18 +58,7 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
     if(!hasDate) { setDateTime(moment().format('YYYY-MM-DD HH:mm'))};
     setHasDate(!hasDate);
   }
-
-  const handleChangeMultipleCategories = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setCategory(value);
-  };
-
+  
   const handleDateChange = (date, dateString) => {
     setDateTime(dateString);
   };
@@ -104,11 +103,12 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
           }}
         />
 
-        <MultiSelector 
-          label='Category'
-          items={categories}
-          selectedItems={category}
-          handleChange={handleChangeMultipleCategories}
+        <MultiSelect
+          options={destructuredCategories}
+          value={selectedCategories}
+          onChange={setSelectedCategories}
+          labelledBy="Select"
+          hasSelectAll={false}
         />
         <Button onClick={onOpenCategoryPopup} color="primary">
           + Add Category
@@ -116,22 +116,22 @@ const ItemInput = ({ handleSubmit, handleClose, onOpenCategoryPopup }) => {
         <section className='custom-color-picker'>
           <HexColorPicker color={color} onChange={setColor} />
         </section>
-        <Space direction="vertical" size={12}>
-        <FormControlLabel
-            control={<Checkbox checked={hasDate} onChange={handleShowDate} name="checkedA" />}
-            label="Has date"
-        />
-        {hasDate && 
-          <DatePicker
-            format='YYYY-MM-DD HH:mm'
-            showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
-            onChange={handleDateChange}
-            getPopupContainer={(triggerNode) => {
-              return triggerNode.parentNode;
-            }}
+        <Space direction="vertical" size={12} style={{marginTop: '40px'}}>
+          <FormControlLabel
+              control={<Checkbox checked={hasDate} onChange={handleShowDate} name="checkedA" />}
+              label="Has date"
           />
-        }
-      </Space>
+          {hasDate && 
+            <DatePicker
+              format='YYYY-MM-DD HH:mm'
+              showTime={{ defaultValue: moment('00:00:00', 'HH:mm') }}
+              onChange={handleDateChange}
+              getPopupContainer={(triggerNode) => {
+                return triggerNode.parentNode;
+              }}
+            />
+          }
+        </Space>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
