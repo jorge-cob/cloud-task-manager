@@ -2,3 +2,7 @@
   width: auto;
 }
 
+.react-colorful__pointer {
+  z-index: 0 !important;
+}
+
