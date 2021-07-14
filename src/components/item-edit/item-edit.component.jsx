@@ -13,12 +13,14 @@ import {
 
 import { selectCategoryItems } from '../../redux/category/category.selectors';
 import CategoryPopup from '../category-popup/category-popup.component';
-import MultiSelector from '../multi-selector/multi-selector.component';
 import CheckboxWithSelectDropdown from '../checkbox-with-select-dropdown/checkbox-with-select-dropdown.component';
+
+import { HexColorPicker } from 'react-colorful';
 import { DatePicker } from 'antd';
 import moment from 'moment';
+import MultiSelect from 'react-multi-select-component';
+
 import '../../assets/styles/date-picker-without-global.styles.css'; // or 'antd/dist/antd.less'
-import { HexColorPicker } from 'react-colorful';
 import './color-picker.styles.css';
 
 const ItemEdit = ({ handleSubmit, handleClose }) => {
@@ -26,20 +28,30 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
   const {allCategories} = useSelector(createStructuredSelector({
     allCategories: selectCategoryItems
   }));
+
+  const destructuredCategories = [];
+
+  allCategories.forEach(cat => {
+    destructuredCategories.push({label: cat.title, value: cat.id});
+  });
+
   const { item, categories } = useSelector(state => state.item);
-  const [ title, setTitle ] = useState(item.title);
-  const [ description, setDescription ] = useState(item.description);
-  const [ isTodo, setIsTodo ] = useState(item.isTodo);
-  const [ status, setStatus ] = useState(item.status);
-  const [ category, setCategory] = useState([]);
+  const [title, setTitle] = useState(item.title);
+  const [description, setDescription] = useState(item.description);
+  const [isTodo, setIsTodo] = useState(item.isTodo);
+  const [status, setStatus] = useState(item.status);
+  const [category, setCategory] = useState([]);
   const [dateTime, setDateTime] = useState(item.dateTime);
   const [titleErrorText, setTitleErrorText] = React.useState('');
   const [color, setColor] = useState(item?.color || '#f2f0eb');
   const [isCategoryPopupOpen, setIsCategoryOpenPopup] = useState(false);
   const [hasDate, setHasDate] = useState(!!dateTime);
+
   useEffect(() => {
-    const selectedCategoriesIds = categories && categories.map(category => category.id);
-   setCategory(selectedCategoriesIds);
+    const selectedCategoriesIds = categories && categories.map(category => {
+     return {value: category.id, label: category.title }
+    });
+    setCategory(selectedCategoriesIds);
   }, [categories]);
 
   const onSubmit = () => {
@@ -47,7 +59,8 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
       setTitleErrorText("Please enter title");
     } else {
       setTitleErrorText("");
-      handleSubmit(category, title, description, isTodo, status, color, item.index, hasDate ? dateTime : '');
+      const selectedCategoriesIds = category.map(cat => cat.value);
+      handleSubmit(selectedCategoriesIds, title, description, isTodo, status, color, item.index, hasDate ? dateTime : '');
     }
 
   };
@@ -66,16 +79,6 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
     setHasDate(!hasDate);
   }
 
-  const handleChangeMultipleCategories = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setCategory(value);
-  };
 
   const handleDateChange = (date, dateString) => {
     setDateTime(dateString);
@@ -124,13 +127,14 @@ const ItemEdit = ({ handleSubmit, handleClose }) => {
             done: 'Done',
           }}
         />
-
-        <MultiSelector 
-          label='Category'
-          items={allCategories}
-          selectedItems={category}
-          handleChange={handleChangeMultipleCategories}
+        <MultiSelect
+          options={destructuredCategories}
+          value={category}
+          onChange={setCategory}
+          labelledBy="Select"
+          hasSelectAll={false}
         />
+     
         <Button onClick={handleClickOpenCategoryPopup} color="primary">
           + Add Category
         </Button>
