@@ -61,33 +61,31 @@ export const createItemsDocument = async (userAuth, itemData) => {
   }
   const itemRef = firestore.doc(`items/${id}`);
   const snapShot = await itemRef.get();
-  if(!snapShot.exists) {
-    const createdAt = new Date();
-    try {
+  const createdAt = new Date();
+  try {
+    if(!snapShot.exists) {
       await firestore.collection('items').doc(id).set({ userId: userAuth.uid, categories, id, title, description, isTodo, status, color, index: computedIndex, dateTime, createdAt: createdAt});  
-      const junctions = await firestore
-      .collection(`junction_category_item`)
-      .where("itemId", "==", id)
-      .get();
-      await Promise.all(
-        junctions.docs
-          .filter(doc => doc.exists)
-          .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
-      );
-      categories.forEach(async cat => {
-        const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
-        await junctionRef.set({ categoryId: cat, itemId: id, createdAt: createdAt });
-      })
-    } catch (err) {
-      console.log('error creating item', err.message);
-    }
-  } else {
-    try {
+    } else {
       await firestore.collection('items').doc(id).update({categories, id, title, description, isTodo, status, color, index: computedIndex, dateTime});
-    } catch (err) {
-      console.log('error updating item', err.message);
     }
+    const junctions = await firestore
+    .collection(`junction_category_item`)
+    .where("itemId", "==", id)
+    .get();
+    await Promise.all(
+      junctions.docs
+        .filter(doc => doc.exists)
+        .map(doc => firestore.doc(`junction_category_item/${doc.data().categoryId}_${doc.data().itemId}`).delete())
+    );
+    categories.forEach(async cat => {
+      const junctionRef = firestore.doc(`junction_category_item/${cat}_${id}`);
+      await junctionRef.set({ categoryId: cat, itemId: id, createdAt: createdAt });
+    })
+
+  } catch (err) {
+    console.log('Something went wrong when updating your item. Please try again later', err.message);
   }
+
   return itemRef;
 };
 
