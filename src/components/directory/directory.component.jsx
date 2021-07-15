@@ -12,13 +12,14 @@ import ItemEdit from '../item-edit/item-edit.component';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
 import CategoryPopup from '../category-popup/category-popup.component';
 
-import { DirectoryMenuContainer, DirectoryContainer } from './directory.styles';
+import { DirectoryMenuContainer, DirectoryContainer, FooterButtonContainer } from './directory.styles';
 import DirectoryList from '../directory-list/directory-list.component';
 import DetailPopup from '../detail-popup/detail-popup.component';
 
 import { getStatusIcon } from './directory.helpers';
 import DirectoryFilter from '../directory-filter/directory-filter.component';
 import CategoryEditPopup from '../category-popup/category-edit-popup.component';
+import CustomButton from '../custom-button/custom-button.component';
 
 const useStyles = makeStyles({
   iconMenuItem: {
@@ -124,12 +125,12 @@ const Directory = () => {
           selectedCategory={selectedCategory.id}
         />
       </DirectoryMenuContainer>
-        <div style={{display: 'flex'}}>
-          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' onOpenCategoryPopup={handleClickOpenCategoryPopup} />
-          <Button onClick={handleClickOpenCategoryPopup} color="primary">
+        <FooterButtonContainer>
+          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' />
+          <CustomButton onClick={handleClickOpenCategoryPopup}>
             + Category
-          </Button>
-        </div>
+          </CustomButton>
+        </FooterButtonContainer>
     </DirectoryContainer>
   );
 }
