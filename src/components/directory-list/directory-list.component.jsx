@@ -80,6 +80,11 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   }
 
   return (
+    <div style={{
+      height: '100%',
+      overflow: 'auto',
+      boxSizing: 'border-box'
+    }}>
     <DndContext 
       sensors={sensors}
       collisionDetection={closestCenter}
@@ -133,7 +138,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         : null}
       </DragOverlay>
     </DndContext>
-     
+     </div>
   );
 
   function handleDragStart(event) {

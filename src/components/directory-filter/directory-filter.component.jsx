@@ -8,7 +8,7 @@ import TodoFilter from './todo-filter.component';
 import { selectCategoryItems } from '../../redux/category/category.selectors';
 import { selectDirectoryFilteredCategories, selectDirectoryFilteredStatus, selectDirectoryFilterType } from '../../redux/directory/directory.selectors';
 import FilteredFilter from './filtered-filter.component';
-import { FilterContainer, CategoryFilterContainer, TodoFilterContainer } from './filter.styles';
+import { FilterContainer, CategoryFilterContainer } from './filter.styles';
 
 const DirectoryFilter = props => {
   const { handleEditCategory } = props;
@@ -24,9 +24,7 @@ const DirectoryFilter = props => {
         <FilteredFilter filteredCategories={filteredCategories} categories={categories} handleEditCategory={handleEditCategory} />
         <CategoryFilter filteredCategories={filteredCategories} categories={categories} handleEditCategory={handleEditCategory} />
       </CategoryFilterContainer>
-      <TodoFilterContainer>
-        <TodoFilter filteredStatus={filteredStatus} filterType={filterType} />
-      </TodoFilterContainer>
+      <TodoFilter filteredStatus={filteredStatus} filterType={filterType} />
     </FilterContainer>
 
   )

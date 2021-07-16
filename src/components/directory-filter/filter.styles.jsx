@@ -38,7 +38,7 @@ export const FilteredCategoryChip = styled.div`
   max-width: 156px;
   height: 28px;
   text-transform: capitalize;
-  background-color: ${props => props.backgroundColor ?  props.backgroundColor : 'f2f0eb'};
+  background-color: ${props => props.backgroundColor ?  props.backgroundColor : '#f2f0eb'};
   text-align: center;
   margin-top: 5px;
   margin-left: 5px;
@@ -57,14 +57,16 @@ export const FilteredCategoryChip = styled.div`
 `;
 
 export const TodoMenuContainer = styled.div`
-  left: 75%;
-  top: 170px;
+  height: 160px;
+  text-align: center;
+  position: sticky;
+  padding-right: 40px;
 `;
 
 export const TodoStatusContainer = styled.div`
-  flex-direction: column;
   width: 160px;
-  right: -110px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const FilterContainer = styled.div`
@@ -75,7 +77,7 @@ export const FilterContainer = styled.div`
   flex-wrap: row wrap;
   flex-direction: row;
   align-items: center;
-  width: 80%;
+  width: 100%;
   justify-content: space-between;
 `;
 
@@ -86,11 +88,10 @@ export const CategoryFilterContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  padding-left: 40px;
 `;
 
-export const TodoFilterContainer = styled.div`
-  height: 160px;
-`;
+
 
 export const IconCloseItem = styled(IconClose)`
   width: 20px;

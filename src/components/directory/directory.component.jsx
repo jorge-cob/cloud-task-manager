@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Button } from '@material-ui/core';
-
 import { addItemStart, removeItem } from '../../redux/directory/directory.actions';
 import { fetchItemCategoriesStart, setItem } from '../../redux/item/item.actions';
 
@@ -12,7 +10,7 @@ import ItemEdit from '../item-edit/item-edit.component';
 import ButtonWithPopupWithSubmit from '../button-with-popup-with-submit/button-with-popup-with-submit.component';
 import CategoryPopup from '../category-popup/category-popup.component';
 
-import { DirectoryMenuContainer, DirectoryContainer, FooterButtonContainer } from './directory.styles';
+import { DirectoryMenuContainer, DirectoryContainer, FooterButtonContainer, FilterContainer } from './directory.styles';
 import DirectoryList from '../directory-list/directory-list.component';
 import DetailPopup from '../detail-popup/detail-popup.component';
 
@@ -97,7 +95,9 @@ const Directory = () => {
   
   return (
     <DirectoryContainer>
-      <DirectoryFilter handleEditCategory={handleClickOpenCategoryEditPopup} />
+      <FilterContainer>
+        <DirectoryFilter handleEditCategory={handleClickOpenCategoryEditPopup} />
+      </FilterContainer>
       <DirectoryMenuContainer>
         <DirectoryList 
           handleClickOpenDetailPopup={handleClickOpenDetailPopup} 
@@ -125,12 +125,12 @@ const Directory = () => {
           selectedCategory={selectedCategory.id}
         />
       </DirectoryMenuContainer>
-        <FooterButtonContainer>
-          <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' />
-          <CustomButton onClick={handleClickOpenCategoryPopup}>
-            + Category
-          </CustomButton>
-        </FooterButtonContainer>
+      <FooterButtonContainer>
+        <ButtonWithPopupWithSubmit label='+ entry' popupLabel='New entry' />
+        <CustomButton onClick={handleClickOpenCategoryPopup}>
+          + Category
+        </CustomButton>
+      </FooterButtonContainer>
     </DirectoryContainer>
   );
 }

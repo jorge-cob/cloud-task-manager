@@ -1,25 +1,38 @@
 import styled from 'styled-components';
 
 export const DirectoryMenuContainer = styled.div`
-  width: 100%;
-  margin-top: 20px;
-  margin-bottom: 40px;
+
+position:relative;
+    height: 100%;
+    width:100%; /* Sizing - any length */
+    padding:60px 0 30px 0; /* Header height and footer height */
+    margin:0 auto 0 auto; /* Center content */
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    box-sizing:border-box;
+
+
 `;
 
 export const DirectoryContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
 `;
 
 export const FooterButtonContainer = styled.div`
-  display: flex;
+  width: 100%;
   position: fixed; 
   bottom: 0;
+  height: 30px;
+`;
+
+export const FilterContainer = styled.div`
   width: 100%;
-  left: 0;
-  right: 0;
-  padding-bottom: 40; 
-  background-color: #f2f0eb; 
-  align-content: center;
-  justify-content: space-around;
+  position: sticky; 
+  top: 60px;
+  height: 120px !important;
+  z-index: 5;
+  background-color: #f2f0eb;
 `;
