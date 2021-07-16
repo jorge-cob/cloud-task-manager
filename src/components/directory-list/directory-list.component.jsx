@@ -47,6 +47,7 @@ const useStyles = makeStyles({
 const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, handleClickDeleteItem}) => {
   const { iconMenuItem } = useStyles();
   const dispatch = useDispatch();
+  let filteredItemsCount = 0;
 
   const {items, filteredCategories, filterType, filteredStatus} = useSelector(createStructuredSelector({
     items: selectDirectoryItems,
@@ -79,6 +80,33 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
     return + Math.random() * (1000000 - 0) + 1;
   }
 
+  const filteredItems = () => { 
+    return draggableItems.map(item => {
+      const { isTodo, status, id, title, color, ...otherItemProps } = item;
+      const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
+      const icon = isTodo && getStatusIcon(status, iconMenuItem);
+      const isDraggingItem = activeId === id; 
+      filteredItemsCount = showItem ? filteredItemsCount++ : filteredItemsCount;
+      return (
+        showItem && 
+          <SortableMenuItemWithButtons 
+            onClick={() => handleClickOpenDetailPopup(item)}
+            onEditButtonClick={() => handleClickOpenEditPopup(item)}
+            onDeleteButtonClick={() => handleClickDeleteItem(id)}
+            backgroundColor={color}
+            Icon={icon}
+            Menu={ItemManagerItemMoreOptions}
+            key={id}
+            id={id}
+            item={item}
+            hidden={isDraggingItem}
+            {...otherItemProps}
+          />
+      )
+    })
+    
+  }
+
   return (
     <div style={{
       height: '100%',
@@ -96,29 +124,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         strategy={verticalListSortingStrategy}
       >
         { 
-          draggableItems.map(item => {
-            const { isTodo, status, id, title, color, ...otherItemProps } = item;
-            const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
-            const icon = isTodo && getStatusIcon(status, iconMenuItem);
-            const isDraggingItem = activeId === id; 
-
-            return (
-              showItem && 
-                <SortableMenuItemWithButtons 
-                  onClick={() => handleClickOpenDetailPopup(item)}
-                  onEditButtonClick={() => handleClickOpenEditPopup(item)}
-                  onDeleteButtonClick={() => handleClickDeleteItem(id)}
-                  backgroundColor={color}
-                  Icon={icon}
-                  Menu={ItemManagerItemMoreOptions}
-                  key={id}
-                  id={id}
-                  item={item}
-                  hidden={isDraggingItem}
-                  {...otherItemProps}
-                />
-            )
-          })
+          filteredItems()
         }
 
       </SortableContext>
