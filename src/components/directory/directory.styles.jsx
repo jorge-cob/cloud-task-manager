@@ -23,9 +23,12 @@ export const DirectoryContainer = styled.div`
 
 export const FooterButtonContainer = styled.div`
   width: 100%;
-  position: fixed; 
+  position: sticky;
   bottom: 0;
-  height: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background-color: #f2f0eb;
 `;
 
 export const FilterContainer = styled.div`
