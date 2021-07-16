@@ -47,7 +47,6 @@ const useStyles = makeStyles({
 const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, handleClickDeleteItem}) => {
   const { iconMenuItem } = useStyles();
   const dispatch = useDispatch();
-  let filteredItemsCount = 0;
 
   const {items, filteredCategories, filterType, filteredStatus} = useSelector(createStructuredSelector({
     items: selectDirectoryItems,
@@ -79,6 +78,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
   function addSomeRandomeness() {
     return + Math.random() * (1000000 - 0) + 1;
   }
+  let filteredItemsCount = 0;
 
   const filteredItems = () => { 
     return draggableItems.map(item => {
@@ -86,9 +86,9 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
       const showItem = itemIsBeingShown(item, filteredCategories, filteredStatus, filterType);
       const icon = isTodo && getStatusIcon(status, iconMenuItem);
       const isDraggingItem = activeId === id; 
-      filteredItemsCount = showItem ? filteredItemsCount++ : filteredItemsCount;
-      return (
-        showItem && 
+      filteredItemsCount = showItem ? filteredItemsCount + 1 : filteredItemsCount;
+      if (showItem && filteredItemsCount !== 0) {
+        return (
           <SortableMenuItemWithButtons 
             onClick={() => handleClickOpenDetailPopup(item)}
             onEditButtonClick={() => handleClickOpenEditPopup(item)}
@@ -102,9 +102,9 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             hidden={isDraggingItem}
             {...otherItemProps}
           />
-      )
+        )
+      }
     })
-    
   }
 
   return (
@@ -126,6 +126,22 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         { 
           filteredItems()
         }
+        {
+          filteredItemsCount === 0 && 
+            <div style={{
+              height: '50px', 
+              width: '100%', 
+              backgroundColor: '#f2f0eb',
+              flex: '1 1 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid black',
+              margin: '15px 0',
+              fontSize: '24px',
+              fontWeight: 'bold',
+            }}> No item matches your current filters.</div>      
+        }
 
       </SortableContext>
       <DragOverlay>
@@ -139,7 +155,6 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
             Icon={draggingItem.isTodo && getStatusIcon(draggingItem.status, iconMenuItem)}
             Menu={ItemManagerItemMoreOptions} 
             item={items.find(x => x.id === activeId)}
-
           /> 
         : null}
       </DragOverlay>
