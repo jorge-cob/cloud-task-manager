@@ -32,16 +32,16 @@ export function* fetchCategoriesStart() {
 
 export function* addNewCategory(action) {
   const userAuth = yield getCurrentUser();
-  const { newItemId, title, description, color, textColor } = action.payload;
+  const { categoryId, title, description, color, textColor } = action.payload;
   const userId = userAuth.uid;
   const itemData = {
-    id: newItemId,
+    id: categoryId,
     title,
     description,
     color,
     textColor
   };
-  yield call(addCategoryToDb, userId, newItemId, itemData)
+  yield call(addCategoryToDb, userId, categoryId, itemData)
 };
 
 export function* removeCategory(action) {

@@ -29,8 +29,8 @@ const CategoryPopup = ({ open, handleClose }) => {
     if (!title) {
       setTitleErrorText('Please enter title');
     } else {
-      const newItemId = uuidv4();
-      dispatch(addNewCategory(newItemId, title, description, color, textColor));
+      const newCategoryId = uuidv4();
+      dispatch(addNewCategory({categoryId: newCategoryId, title, description, color, textColor}));
       setTitleErrorText('');
       setTitle('');
       setDescription('');

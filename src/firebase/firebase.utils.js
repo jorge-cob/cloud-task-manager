@@ -209,11 +209,11 @@ export const deleteCategoryFromDB = async (categoryId) => {
   await batch.commit();
 }
 
-export const addCategoryToDb = async (userId, newItemId, itemData) => {
+export const addCategoryToDb = async (userId, categoryId, itemData) => {
   const createdAt = new Date();
-  const junctionRef = firestore.doc(`junction_user_category/${userId}_${newItemId}`);
-  await junctionRef.set({ userId, categoryId: newItemId, createdAt: createdAt });
-  return await firestore.collection('categories').doc(newItemId).set({...itemData, createdAt: createdAt});
+  const junctionRef = firestore.doc(`junction_user_category/${userId}_${categoryId}`);
+  await junctionRef.set({ userId, categoryId, createdAt: createdAt });
+  return await firestore.collection('categories').doc(categoryId).set({...itemData, createdAt: createdAt});
 };
 
 export const changeItemIndex = async (itemToChangeIndex, newIndex) => {
