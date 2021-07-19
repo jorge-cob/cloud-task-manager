@@ -33,7 +33,7 @@ import {
   selectDirectoryFilterType
 } from '../../redux/directory/directory.selectors';
 
-import { setItems } from '../../redux/directory/directory.actions';
+import { setItemsIndex } from '../../redux/directory/directory.actions';
 
 import { itemIsBeingShown } from '../../redux/directory/directory.utils';
 
@@ -192,7 +192,7 @@ const DirectoryList = ({ handleClickOpenDetailPopup, handleClickOpenEditPopup, h
         }
         const newItemArray = arrayMove(draggableItems, sourceIndex, destinationIndex);
         newItemArray[destinationIndex].index = newItemIndex;
-        dispatch(setItems(newItemArray, active.id, newItemIndex)); 
+        dispatch(setItemsIndex({newItemArray, activeId: active.id, newItemIndex})); 
     }
     setActiveId(null);
   }

@@ -70,8 +70,8 @@ export function* removeItem() {
 }
 
 export function* reorderIndex(action) {
-  const { itemToChangeIndex, newIndex } = action.payload;
-  yield call(changeItemIndex, itemToChangeIndex, newIndex)
+  const { activeId, newItemIndex } = action.payload;
+  yield call(changeItemIndex, activeId, newItemIndex)
 }
 
 export function* reindexItem() {

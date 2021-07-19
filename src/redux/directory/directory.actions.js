@@ -56,9 +56,9 @@ export const removeStatusFilter = statusId => ({
   payload: statusId
 });
 
-export const setItems = (items, itemToChangeIndex, newIndex) => ({
+export const setItemsIndex = itemData => ({
   type: DirectoryActionTypes.SET_ITEMS,
-  payload: {items, itemToChangeIndex, newIndex}
+  payload: itemData
 });
 
 export const setFilterType = type => ({

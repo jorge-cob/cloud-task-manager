@@ -70,7 +70,7 @@ const directoryReducer = (state = INITIAL_STATE, action) => {
     case DirectoryActionTypes.SET_ITEMS:
       return {
         ...state,
-        items: action.payload.items
+        items: action.payload.newItemArray
       }
     case DirectoryActionTypes.SIGN_OUT_SUCCESS:
       return INITIAL_STATE;
