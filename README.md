@@ -1,3 +1,6 @@
+# This project is currently in abandoned/not-working status. Not expecting any update soon. 
+
+
 # cloud-task-manager  v1.0
 ## A personal organizer  
 
